@@ -15,8 +15,8 @@
 /*****************/
 
 /* debugCSS is meant to be loaded on an existing page to highlight potentially
-   broken, malformed or legacy code.  Not all "errors" are created equally, so
-   they are color coded to highlight severity.  Green is "probably not a big
+   broken, malformed or legacy (X)HTML.  Not all "errors" are created equally,
+   so they are color coded to highlight severity.  Green is "probably not a big
    problem", yellow is "worth looking at" and red is "you really should fix
    this."
 */
