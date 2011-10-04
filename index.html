@@ -1,77 +1,218 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
-  <meta charset='utf-8'>
-
-  <title>imbrianj/debugCSS @ GitHub</title>
-
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="keywords" content="CSS, CSS Development, Web Development, Cascading Style Sheets, Web Styles" />
+  <meta name="description" content="debugCSS: (X)HTML debugging tool built with CSS" />
+  <title>debugCSS : (X)HTML debugging tool built with CSS</title>
   <style type="text/css">
+    html,
+    body,
+    div,
+    span,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    pre,
+    a,
+    code,
+    em,
+    dl,
+    dt,
+    dd,
+    ol,
+    ul,
+    li {
+      border: 0;
+      font-family: inherit;
+      font-size: 100%;
+      font-style: inherit;
+      font-weight: inherit;
+      margin: 0;
+      outline: 0;
+      padding: 0;
+      vertical-align: baseline;
+    }
+
+    :focus {
+      outline: #000 dotted thin;
+    }
+
+    a {
+      color: #286EA0;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    a:visited {
+      color: #6B899F;
+    }
+
     body {
-      margin-top: 1.0em;
-      background-color: #268b37;
-      font-family: Helvetica, Arial, FreeSans, san-serif;
-      color: #ffffff;
+      background: #FFF;
+      color: #000;
+      font-family: helvetica;
+      line-height: 1.3;
     }
-    #container {
-      margin: 0 auto;
-      width: 700px;
+
+    ol,
+    ul {
+      list-style: none;
     }
-    h1 { font-size: 3.8em; color: #d974c8; margin-bottom: 3px; }
-    h1 .small { font-size: 0.4em; }
-    h1 a { text-decoration: none }
-    h2 { font-size: 1.5em; color: #d974c8; }
-    h3 { text-align: center; color: #d974c8; }
-    a { color: #d974c8; }
-    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
-    .download { float: right; }
-    pre { background: #000; color: #fff; padding: 15px;}
-    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
-    .footer { text-align:center; padding-top:30px; font-style: italic; }
+
+    p,
+    pre,
+    .mod li {
+      margin: .5em 0;
+    }
+
+    code,
+    pre {
+      font-family: monospace;
+    }
+
+    pre {
+      border: 1px solid #CCC;
+      -moz-border-radius: .5em;
+      -webkit-border-radius: .5em;
+      border-radius: .5em;
+      padding: .5em;
+    }
+
+    pre:hover {
+      background-color: #EAEAEA;
+      -moz-box-shadow: 3px 3px 5px rgba(17,17,17,.1);
+      -webkit-box-shadow: 3px 3px 5px rgba(17,17,17,.1);
+      box-shadow: 3px 3px 5px rgba(17,17,17,.1);
+    }
+
+    dl {
+      margin-bottom: .5em;
+    }
+
+    dt {
+      font-weight: bold;
+      margin-top: .5em;
+    }
+
+    dd {
+      text-indent: 2em;
+    }
+
+    .wrapper {
+      margin: 1em auto;
+      max-width: 1280px;
+      min-width: 640px;
+      width: 80%;
+    }
+
+    #hd h1 {
+      font-size: 2em;
+      text-shadow: 3px 3px 5px rgba(17,17,17,.1);
+    }
+
+    .mod .hd h3 {
+      border-bottom: 1px solid #CCC;
+      font-size: 1.5em;
+      margin-bottom: .5em;
+      text-shadow: 3px 3px 5px rgba(17,17,17,.1);
+    }
+
+    #hd,
+    .mod {
+      margin-bottom: 3em;
+    }
+
+    cite {
+      font-style: italic;
+    }
+
+    #install .bd a.install {
+      background: #4970A7;
+      background-image: -moz-linear-gradient(top, #4B71A9 0%, #2A5797 50%, #235293 54%, #14468B 100%);
+      background-image: -webkit-linear-gradient(top, #4B71A9 0%, #2A5797 50%, #235293 54%, #14468B 100%);
+      border: 1px solid #14468B;
+      -moz-border-radius: 3px;
+      -webkit-border-radius: 3px;
+      border-radius: 3px;
+      -moz-box-shadow: 0px 1px 1px rgba(242, 242, 242, 0.7);
+      -webkit-box-shadow: 0px 1px 1px rgba(242, 242, 242, 0.7);
+      box-shadow: 0px 1px 1px rgba(242, 242, 242, 0.7);
+      color: #FFF;
+      cursor: pointer;
+      display: block;
+      *display: inline;
+      padding: 1em;
+      text-align: center;
+      width: 5em;
+      zoom: 1;
+    }
+
+    .mod ul {
+      list-style: disc outside none;
+      padding-left: 3em;
+    }
   </style>
 </head>
-
 <body>
-  <a href="http://github.com/imbrianj/debugCSS"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
 
-  <div id="container">
-
-    <div class="download">
-      <a href="http://github.com/imbrianj/debugCSS/zipball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/zip.png"></a>
-      <a href="http://github.com/imbrianj/debugCSS/tarball/master">
-        <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
+  <div class="wrapper">
+    <div id="hd">
+      <h1>debugCSS : HTML debugging tool built with CSS</h1>
     </div>
+    <div id="bd">
 
-    <h1><a href="http://github.com/imbrianj/debugCSS">debugCSS</a>
-      <span class="small">by <a href="http://github.com/imbrianj">imbrianj</a></span></h1>
-
-    <div class="description">
-      CSS to highlight potentially malformed, invalid or questionable markup.
+      <div class="mod" id="summary">
+        <div class="hd">
+          <h3>Summary</h3>
+        </div>
+        <div class="bd">
+          <p>
+            debugCSS is meant to be loaded on an existing page to highlight potentially broken, malformed or legacy (X)HTML.
+          </p>
+          <p>
+            Not all "errors" are created equally, so they are color coded to highlight severity.  Green is "probably not a big problem", yellow is "worth looking at" and red is "you really should fix this."
+          </p>
+        </div>
+      </div>
+      <div class="mod" id="install">
+        <div class="hd">
+          <h3>Install</h3>
+        </div>
+        <div class="bd">
+          <p>
+            Click and drag the link below to your bookmark toolbar to install - or right click "Bookmark This Link".
+          </p>
+          <a href="javascript:(function(d,i,l){l=d.getElementById(i);if(l){l.parentNode.removeChild(l);return;}l=d.createElement('link');l.id=i;l.rel='stylesheet';l.type='text/css';l.href='//imbrianj.github.com/debugCSS/debugCSS.css';d.getElementsByTagName('head')[0].appendChild(l);}(document,'debugCSS'))" class="install">debugCSS</a>
+        </div>
+      </div>
+      <div class="mod" id="thanks">
+        <div class="hd">
+          <h3>A Big Thanks To</h3>
+        </div>
+        <div class="bd">
+          <ul>
+            <li>Thierry Koblentz</li>
+            <li>Marcell Duran</li>
+            <li>Ryan Grove</li>
+            <li>Seth Bartalotto</li>
+            <li>Shahar Roth</li>
+            <li>Mark Kawakami</li>
+            <li>David Miller</li>
+            <li>Akshay Patel</li>
+            <li>Andres Narvaez</li>
+          </ul>
+        </div>
+      </div>
     </div>
-
-    <h2>Authors</h2>
-<p>Brian (bjohnsonwsu@gmail.com)<br/>Brian J (bjohnsonwsu@hotmail.com)<br/><br/>      </p>
-<h2>Contact</h2>
-<p>Brian (bjohnsonwsu@gmail.com)<br/>      </p>
-
-
-    <h2>Download</h2>
-    <p>
-      You can download this project in either
-      <a href="http://github.com/imbrianj/debugCSS/zipball/master">zip</a> or
-      <a href="http://github.com/imbrianj/debugCSS/tarball/master">tar</a> formats.
-    </p>
-    <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
-      by running:
-      <pre>$ git clone git://github.com/imbrianj/debugCSS</pre>
-    </p>
-
-    <div class="footer">
-      get the source code on GitHub : <a href="http://github.com/imbrianj/debugCSS">imbrianj/debugCSS</a>
-    </div>
-
   </div>
-
-  
 </body>
 </html>
