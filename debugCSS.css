@@ -35,7 +35,12 @@ table > tbody + tfoot:after,
 table > tr:first-child:last-child:after,
 table > tbody > tr:first-child:last-child:after,
 table > *:not(thead):not(tfoot):not(tbody):not(tr):not(colgroup):not(caption):after,
+table[align]:after,
+table[bgcolor]:after,
 table[border]:after,
+table[cellpadding]:after,
+table[cellspacing]:after,
+table[width]:after,
 img:not([alt]):after,
 a:not([href]):after,
 a[href="#"]:after,
@@ -130,7 +135,12 @@ table > *:not(thead):not(tfoot):not(tbody):not(tr):not(colgroup):not(caption):af
   content: 'Only THEAD/TFOOT/TBODY/COLGROUP/CAPTION/TR can be children of a TABLE';
 }
 
-table[border]:after {
+table[align]:after,
+table[bgcolor]:after,
+table[border]:after,
+table[cellpadding]:after,
+table[cellspacing]:after,
+table[width]:after {
   background: yellow;
   content: 'Element has inline style.';
 }
@@ -247,7 +257,12 @@ i {
 table > tr,
 table > tbody + tfoot,
 table > *:not(thead):not(tfoot):not(tbody):not(tr):not(colgroup):not(caption),
+table[align],
+table[bgcolor],
 table[border],
+table[cellpadding],
+table[cellspacing],
+table[width],
 img:not([alt]),
 a:not([href]),
 a[href="#"],
