@@ -227,6 +227,110 @@
         <div class="bd">
           <ul>
             <li>
+              <h4>table:not([summary])</h4>
+              <table>
+                <thead>
+                  <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
+                </thead>
+                <tfoot></tfoot>
+                <tbody>
+                  <tr><td>no</td><td>table</td><td>summary</td></tr>
+                  <tr><td>please</td><td>test</td><td>me.</td></tr>
+                </tbody>
+              </table>
+            </li>
+            <li>
+              <h4>table > tr</h4>
+              <table summary="my table summary">
+                <tr><td>no</td><td>table</td><td>body</td></tr>
+                <tr><td>please</td><td>test</td><td>me.</td></tr>
+              </table>
+            </li>
+            <li>
+              <h4>table th:not([scope])</h4>
+              <table summary="my table summary">
+                <thead>
+                  <tr><th>I'm</th><th>a</th><th>table</th></tr>
+                </thead>
+                <tfoot></tfoot>
+                <tbody>
+                  <tr><td>no</td><td>tr</td><td>scope</td></tr>
+                  <tr><td>please</td><td>test</td><td>me.</td></tr>
+                </tbody>
+              </table>
+            </li>
+            <li>
+              <h4>table thead td</h4>
+              <table summary="my table summary">
+                <thead>
+                  <tr><td scope="col">I'm</td><td scope="col">a</td><td scope="col">table</td></tr>
+                </thead>
+                <tfoot></tfoot>
+                <tbody>
+                  <tr><td>td</td><td>in</td><td>thead</td></tr>
+                  <tr><td>please</td><td>test</td><td>me.</td></tr>
+                </tbody>
+              </table>
+            </li>
+            <li>
+              <h4>table > tbody:first-child</h4>
+              <table summary="my table summary">
+                <tbody>
+                  <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
+                  <tr><td>no</td><td>thead</td><td>tfoot</td></tr>
+                  <tr><td>please</td><td>test</td><td>me.</td></tr>
+                </tbody>
+              </table>
+            </li>
+            <li>
+              <h4>table > tbody + tfoot</h4>
+              <table summary="my table summary">
+                <thead>
+                  <tr><td scope="col">I'm</td><td scope="col">a</td><td scope="col">table</td></tr>
+                </thead>
+                <tbody>
+                  <tr><td>tfoot</td><td>after</td><td>tbody</td></tr>
+                  <tr><td>please</td><td>test</td><td>me.</td></tr>
+                </tbody>
+                <tfoot>
+                  <tr><td>tfoot</td><td>should come before</td></td><td>
+                </tfoot>
+              </table>
+            </li>
+            <li>
+              <h4>table > tr:first-child:last-child</h4>
+              <table summary="my table summary">
+                <tr><td>Only one</td><td>tr</td><td>in a table</td></tr>
+              </table>
+            </li>
+            <li>
+              <h4>table > tbody > tr:first-child:last-child</h4>
+              <table summary="my table summary">
+                <thead>
+                  <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Only one</td><td>tr</td><td>in a tbody</td></tr>
+                </tbody>
+              </table>
+            </li>
+            <li>
+              <h4>table > *:not(thead):not(tfoot):not(tbody):not(tr):not(colgroup):not(caption)</h4>
+              <p>
+                Note: this test may always pass as most browsers seem to move the non-valid tags outside the table element.
+              </p>
+              <table summary="my table summary">
+                <h5>This header doesn't belong here</h5>
+                <thead>
+                  <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>non-valid tag</td><td>as child</td><td>of table</td></tr>
+                  <tr><td>please</td><td>test</td><td>me.</td></tr>
+                </tbody>
+              </table>
+            </li>
+            <li>
               <h4>table[align]</h4>
               <table
                   align="left"
@@ -240,7 +344,6 @@
                   <tr><td>please</td><td>test</td><td>me.</td></tr>
                 </tbody>
               </table>
-              <caption>My table's caption</caption>
             </li>
             <li>
               <h4>table[bgcolor]</h4>
@@ -256,7 +359,6 @@
                   <tr><td>please</td><td>test</td><td>me.</td></tr>
                 </tbody>
               </table>
-              <caption>My table's caption</caption>
             </li>
             <li>
               <h4>table[border]</h4>
@@ -272,7 +374,6 @@
                   <tr><td>please</td><td>test</td><td>me.</td></tr>
                 </tbody>
               </table>
-              <caption>My table's caption</caption>
             </li>
             <li>
               <h4>table[cellpadding]</h4>
@@ -288,7 +389,6 @@
                   <tr><td>please</td><td>test</td><td>me.</td></tr>
                 </tbody>
               </table>
-              <caption>My table's caption</caption>
             </li>
             <li>
               <h4>table[cellspacing]</h4>
@@ -304,7 +404,6 @@
                   <tr><td>please</td><td>test</td><td>me.</td></tr>
                 </tbody>
               </table>
-              <caption>My table's caption</caption>
             </li>
             <li>
               <h4>table[width]</h4>
@@ -320,7 +419,6 @@
                   <tr><td>please</td><td>test</td><td>me.</td></tr>
                 </tbody>
               </table>
-              <caption>My table's caption</caption>
             </li>
           </ul>
         </div>

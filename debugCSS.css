@@ -227,10 +227,14 @@ font:after {
 
 /* These may not be "wrong", but let's bug you anyway. */
 b:after,
-i:after,
+i:after {
+  background: green;
+  content: 'Should you be using STRONG or EM?';
+}
+
 blink:after,
 marquee:after {
-  background: green;
+  background: yellow;
   content: 'Should you be using STRONG or EM?';
 }
 
