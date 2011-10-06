@@ -70,9 +70,11 @@ ul > *:not(li),
 dl > *:not(dt):not(dd):after,
 form > *:not(fieldset):after,
 fieldset *:not(legend):first-child:after,
+iframe:not([title]):after,
 center:after,
 u:after,
 font:after,
+map:after,
 b:after,
 i:after,
 blink:after,
@@ -218,6 +220,11 @@ fieldset *:not(legend):first-child:after {
   content: 'Should your FIELDSET be using a LEGEND?';
 }
 
+iframe:not([title]):after {
+  background: green;
+  content: 'IFRAME lacks TITLE attribute.';
+}
+
 center:after,
 u:after,
 font:after {
@@ -226,6 +233,11 @@ font:after {
 }
 
 /* These may not be "wrong", but let's bug you anyway. */
+map:after {
+  background: green;
+  content: 'Is MAP appropriate here?';
+}
+
 b:after,
 i:after {
   background: green;
@@ -253,6 +265,7 @@ table thead td,
 table > tr:first-child:last-child,
 table > tbody > tr:first-child:last-child,
 table > tbody:first-child,
+map,
 b,
 i {
   outline: 5px solid green;
@@ -296,6 +309,7 @@ ul > *:not(li),
 dl > *:not(dt):not(dd),
 form > *:not(fieldset),
 fieldset *:not(legend):first-child,
+iframe:not([title]),
 center,
 u,
 font,
