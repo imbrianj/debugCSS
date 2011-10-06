@@ -15,8 +15,8 @@
 /*****************/
 
 /* debugCSS is meant to be loaded on an existing page to highlight potentially
-   broken, malformed or legacy code.  Not all "errors" are created equally, so
-   they are color coded to highlight severity.  Green is "probably not a big
+   broken, malformed or legacy (X)HTML.  Not all "errors" are created equally,
+   so they are color coded to highlight severity.  Green is "probably not a big
    problem", yellow is "worth looking at" and red is "you really should fix
    this."
 */
@@ -25,13 +25,22 @@
 /* ERROR MESSAGES */
 /******************/
 
-/* All errors should try to post a message explaning the problem. */
+/* All errors should try to post a message explaining the problem. */
+table:not([summary]):after,
 table > tr:after,
+table th:not([scope]):after,
 table thead td:after,
 table > tbody:first-child:after,
+table > tbody + tfoot:after,
 table > tr:first-child:last-child:after,
 table > tbody > tr:first-child:last-child:after,
+table > *:not(thead):not(tfoot):not(tbody):not(tr):not(colgroup):not(caption):after,
+table[align]:after,
+table[bgcolor]:after,
 table[border]:after,
+table[cellpadding]:after,
+table[cellspacing]:after,
+table[width]:after,
 img:not([alt]):after,
 a:not([href]):after,
 a[href="#"]:after,
@@ -59,11 +68,18 @@ html[xmlns] a h6:after,
 ol > *:not(li),
 ul > *:not(li),
 dl > *:not(dt):not(dd):after,
+form > *:not(fieldset):after,
+fieldset *:not(legend):first-child:after,
+iframe:not([title]):after,
+center:after,
+u:after,
 font:after,
+map:after,
 b:after,
 i:after,
 blink:after,
 marquee:after {
+  border: 1px solid #000;
   color: #000;
   display: block;
   font-family: helvetica;
@@ -80,35 +96,60 @@ marquee:after {
    element.
 */
 
+table:not([summary]):after {
+  background: green;
+  content: 'Should you have a SUMMARY attribute on your TABLE?';
+}
+
 table > tr:after {
   background: yellow;
-  content: 'Table does not have a tbody';
+  content: 'TABLE does not have a TBODY.';
+}
+
+table th:not([scope]):after {
+  background: green;
+  content: 'Should TH have a SCOPE attribute (ROW or COL)?.';
 }
 
 table thead td:after {
   background: green;
-  content: 'Cells in thead should be th.';
+  content: 'Cells in THEAD should be TH.';
 }
 
 table > tbody:first-child:after {
   background: green;
-  content: 'Do you need a thead or tfoot?';
+  content: 'Do you need a THEAD or TFOOT?';
+}
+
+table > tbody + tfoot:after {
+  background: yellow;
+  content: 'TBODY should come after TFOOT.';
 }
 
 table > tr:first-child:last-child:after,
 table > tbody > tr:first-child:last-child:after {
   background: green;
-  content: 'Only one table row in table.  Are you using it for layout?';
+  content: 'Only one TR in TABLE.  Are you using it for layout?';
 }
 
-table[border]:after {
+table > *:not(thead):not(tfoot):not(tbody):not(tr):not(colgroup):not(caption):after {
+  background: yellow;
+  content: 'Only THEAD/TFOOT/TBODY/COLGROUP/CAPTION/TR can be children of a TABLE';
+}
+
+table[align]:after,
+table[bgcolor]:after,
+table[border]:after,
+table[cellpadding]:after,
+table[cellspacing]:after,
+table[width]:after {
   background: yellow;
   content: 'Element has inline style.';
 }
 
 img:not([alt]):after {
   background: yellow;
-  content: 'Image does not have an alt tag.';
+  content: 'Image does not have an ALT attribute.';
 }
 
 a[href="#"]:after,
@@ -127,17 +168,17 @@ a[onmouseout]:after {
 
 label:not([for]):after {
   background: green;
-  content: 'Should label have a for attribute?';
+  content: 'Should LABEL have a FOR attribute?';
 }
 
 nav:not([role]):after {
   background: yellow;
-  content: 'Nav element should have a role.';
+  content: 'NAV element should have a ROLE attribute.';
 }
 
 div[role="img"]:not([aria-label]):after {
   background: yellow;
-  content: 'Div used as image should have aria-label';
+  content: 'DIV used as image should have ARIA-LABEL.';
 }
 
 h1 div:after,
@@ -169,18 +210,44 @@ dl > *:not(dt):not(dd):after {
   content: 'Only DT/DD can be children of a DL';
 }
 
+form > *:not(fieldset):after {
+  background: green;
+  content: 'Should you be using a FIELDSET?';
+}
+
+fieldset *:not(legend):first-child:after {
+  background: green;
+  content: 'Should your FIELDSET be using a LEGEND?';
+}
+
+iframe:not([title]):after {
+  background: green;
+  content: 'IFRAME lacks TITLE attribute.';
+}
+
+center:after,
+u:after,
 font:after {
   background: yellow;
   content: 'Deprecated tag used.';
 }
 
 /* These may not be "wrong", but let's bug you anyway. */
+map:after {
+  background: green;
+  content: 'Is MAP appropriate here?';
+}
+
 b:after,
-i:after,
+i:after {
+  background: green;
+  content: 'Should you be using STRONG or EM?';
+}
+
 blink:after,
 marquee:after {
-  background: green;
-  content: 'Should you be using strong or em?';
+  background: yellow;
+  content: 'Should you be using STRONG or EM?';
 }
 
 /******************/
@@ -192,17 +259,27 @@ marquee:after {
    messing with the document flow.
 */
 
+table:not([summary]),
+table th:not([scope]),
 table thead td,
 table > tr:first-child:last-child,
 table > tbody > tr:first-child:last-child,
 table > tbody:first-child,
+map,
 b,
 i {
   outline: 5px solid green;
 }
 
 table > tr,
+table > tbody + tfoot,
+table > *:not(thead):not(tfoot):not(tbody):not(tr):not(colgroup):not(caption),
+table[align],
+table[bgcolor],
 table[border],
+table[cellpadding],
+table[cellspacing],
+table[width],
 img:not([alt]),
 a:not([href]),
 a[href="#"],
@@ -229,7 +306,12 @@ html[xmlns] a h5,
 html[xmlns] a h6,
 ol > *:not(li),
 ul > *:not(li),
-dl > *:not(dt):not(dd):after,
+dl > *:not(dt):not(dd),
+form > *:not(fieldset),
+fieldset *:not(legend):first-child,
+iframe:not([title]),
+center,
+u,
 font,
 blink,
 marquee {
