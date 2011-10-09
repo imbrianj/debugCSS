@@ -167,7 +167,7 @@ a[onmouseout]:after {
 }
 
 label:not([for]):after {
-  background: green;
+  background: yellow;
   content: 'Should LABEL have a FOR attribute?';
 }
 
@@ -265,6 +265,8 @@ table thead td,
 table > tr:first-child:last-child,
 table > tbody > tr:first-child:last-child,
 table > tbody:first-child,
+form > *:not(fieldset),
+fieldset *:not(legend):first-child,
 map,
 b,
 i {
@@ -307,8 +309,6 @@ html[xmlns] a h6,
 ol > *:not(li),
 ul > *:not(li),
 dl > *:not(dt):not(dd),
-form > *:not(fieldset),
-fieldset *:not(legend):first-child,
 iframe:not([title]),
 center,
 u,
