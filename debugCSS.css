@@ -74,7 +74,7 @@ ol > *:not(li),
 ul > *:not(li),
 dl > *:not(dt):not(dd):after,
 form > *:not(fieldset):after,
-fieldset *:not(legend):first-child:after,
+fieldset > *:not(legend):first-child:after,
 iframe:not([title]):after,
 center:after,
 u:after,
@@ -224,7 +224,7 @@ form > *:not(fieldset):after {
   content: 'Should you be using a FIELDSET?';
 }
 
-fieldset *:not(legend):first-child:after {
+fieldset > *:not(legend):first-child:after {
   background: #88FF88;
   content: 'Should your FIELDSET be using a LEGEND?';
 }
