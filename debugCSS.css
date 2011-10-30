@@ -275,7 +275,7 @@ table > tr:first-child:last-child,
 table > tbody > tr:first-child:last-child,
 table > tbody:first-child,
 form > *:not(fieldset),
-fieldset *:not(legend):first-child,
+fieldset > *:not(legend):first-child,
 map,
 b,
 i {
