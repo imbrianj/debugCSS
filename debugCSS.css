@@ -74,12 +74,14 @@ ol > *:not(li),
 ul > *:not(li),
 dl > *:not(dt):not(dd):after,
 form > *:not(fieldset):after,
-fieldset *:not(legend):first-child:after,
+fieldset > *:not(legend):first-child:after,
 iframe:not([title]):after,
 center:after,
 u:after,
 font:after,
 map:after,
+br + *:not(br):before,
+br + br + *:before,
 b:after,
 i:after,
 blink:after,
@@ -224,7 +226,7 @@ form > *:not(fieldset):after {
   content: 'Should you be using a FIELDSET?';
 }
 
-fieldset *:not(legend):first-child:after {
+fieldset > *:not(legend):first-child:after {
   background: #88FF88;
   content: 'Should your FIELDSET be using a LEGEND?';
 }
@@ -245,6 +247,16 @@ font:after {
 map:after {
   background: #88FF88;
   content: 'Is MAP appropriate here?';
+}
+
+br + *:not(br):before {
+  background: #88FF88;
+  content: 'Is BR appropriate here?';
+}
+
+br + br + *:before {
+  background: #88FF88;
+  content: 'Should you be using a P tag?';
 }
 
 b:after,
@@ -275,8 +287,9 @@ table > tr:first-child:last-child,
 table > tbody > tr:first-child:last-child,
 table > tbody:first-child,
 form > *:not(fieldset),
-fieldset *:not(legend):first-child,
+fieldset > *:not(legend):first-child,
 map,
+br,
 b,
 i {
   outline: 5px solid #88FF88;
@@ -325,4 +338,21 @@ font,
 blink,
 marquee {
   outline: 5px solid #FFFF88;
+}
+
+/*********/
+/* EXTRA */
+/*********/
+
+/* Stuff that helps in developing / debugging, but don't quite fit anywhere
+   else.
+*/
+
+body > img:only-child {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAgMAAAAOFJJnAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAlQTFRF/+Pj2tra2dnZ4Z9gVgAAAHxJREFUGBkFwUGKxDAQBDB9shqcuw2T/3TAc5+A95UruZv+IoNqvEWCavLFDB2M5vPgGpyFNOcB80cPJMxgHhLkQ4IxuBorpDA3Y+MazEfC2+gwgnOxHnSogb15F1JcGxmkcBb1AwlVqCIHadZGwt+NGmQhD1lIuB+scOUfnCk3BP0u5SsAAAAASUVORK5CYII=);
+  border: 50px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  display: block;
+  margin: 1em auto;
+  padding: 0;
 }
