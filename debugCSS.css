@@ -37,8 +37,8 @@ table th:not([scope]):after,
 table thead td:after,
 table > tbody:first-child:after,
 table > tbody + tfoot:after,
-table > tr:first-child:last-child:after,
-table > tbody > tr:first-child:last-child:after,
+table > tr:only-child:after,
+table > tbody > tr:only-child:after,
 table > *:not(thead):not(tfoot):not(tbody):not(tr):not(colgroup):not(caption):after,
 table[align]:after,
 table[bgcolor]:after,
@@ -70,8 +70,8 @@ html[xmlns] a h3:after,
 html[xmlns] a h4:after,
 html[xmlns] a h5:after,
 html[xmlns] a h6:after,
-ol > *:not(li),
-ul > *:not(li),
+ol > *:not(li):after,
+ul > *:not(li):after,
 dl > *:not(dt):not(dd):after,
 form > *:not(fieldset):after,
 fieldset > *:not(legend):first-child:after,
@@ -119,7 +119,7 @@ table > tr:after {
 
 table th:not([scope]):after {
   background: #88FF88;
-  content: 'Should TH have a SCOPE attribute (ROW or COL)?.';
+  content: 'Should TH have a SCOPE attribute (ROW or COL)?  OK if using ID and HEADERS.';
 }
 
 table thead td:after {
@@ -137,8 +137,8 @@ table > tbody + tfoot:after {
   content: 'TBODY should come after TFOOT.';
 }
 
-table > tr:first-child:last-child:after,
-table > tbody > tr:first-child:last-child:after {
+table > tr:only-child:after,
+table > tbody > tr:only-child:after {
   background: #88FF88;
   content: 'Only one TR in TABLE.  Are you using it for layout?';
 }
