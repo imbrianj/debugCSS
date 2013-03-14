@@ -47,6 +47,9 @@ table[cellpadding]:after,
 table[cellspacing]:after,
 table[width]:after,
 img:not([alt]):after,
+img:not([src]):after,
+img[src=""]:after,
+img[src="#"]:after,
 a:not([href]):after,
 a[href="#"]:after,
 a[href*=javascript\:]:after,
@@ -161,6 +164,13 @@ table[width]:after {
 img:not([alt]):after {
   background: #FFFF88;
   content: 'Image does not have an ALT attribute.';
+}
+
+img:not([src]):after,
+img[src=""]:after,
+img[src="#"]:after {
+  background: #FF8888;
+  content: 'IMG without proper SRC attribute.  Serious implications for some browsers.';
 }
 
 a[href="#"]:after,
@@ -279,6 +289,11 @@ marquee:after {
    element so it's easy to spot.  Use outline instead of border to avoid
    messing with the document flow.
 */
+img:not([src]),
+img[src=""],
+img[src="#"] {
+  outline: 5px solid #FF8888;
+}
 
 table:not([summary]),
 table th:not([scope]),
