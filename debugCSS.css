@@ -45,7 +45,9 @@ table[bgcolor]:after,
 table[border]:after,
 table[cellpadding]:after,
 table[cellspacing]:after,
-table[width]:after,
+*[width]:after, /* Acceptable for transitional doctypes, but should probably be relegated to CSS */
+*[height]:after,
+*[border]:after,
 img:not([alt]):after,
 img:not([src]):after,
 img[src=""]:after,
@@ -79,6 +81,26 @@ dl > *:not(dt):not(dd):after,
 form > *:not(fieldset):after,
 fieldset > *:not(legend):first-child:after,
 iframe:not([title]):after,
+*[class^="1"]:after,
+*[class^="2"]:after,
+*[class^="3"]:after,
+*[class^="4"]:after,
+*[class^="5"]:after,
+*[class^="6"]:after,
+*[class^="7"]:after,
+*[class^="8"]:after,
+*[class^="9"]:after,
+*[class^="0"]:after,
+*[id^="1"]:after,
+*[id^="2"]:after,
+*[id^="3"]:after,
+*[id^="4"]:after,
+*[id^="5"]:after,
+*[id^="6"]:after,
+*[id^="7"]:after,
+*[id^="8"]:after,
+*[id^="9"]:after,
+*[id^="0"]:after,
 center:after,
 u:after,
 font:after,
@@ -156,7 +178,9 @@ table[bgcolor]:after,
 table[border]:after,
 table[cellpadding]:after,
 table[cellspacing]:after,
-table[width]:after {
+*[width]:after,
+*[height]:after,
+*[border]:after {
   background: #FFFF88;
   content: 'Element has inline style.';
 }
@@ -246,6 +270,34 @@ iframe:not([title]):after {
   content: 'IFRAME lacks TITLE attribute.';
 }
 
+*[class^="1"]:after,
+*[class^="2"]:after,
+*[class^="3"]:after,
+*[class^="4"]:after,
+*[class^="5"]:after,
+*[class^="6"]:after,
+*[class^="7"]:after,
+*[class^="8"]:after,
+*[class^="9"]:after,
+*[class^="0"]:after {
+  background: #FFFF88;
+  content: 'Class name cannot start with number.';
+}
+
+*[id^="1"]:after,
+*[id^="2"]:after,
+*[id^="3"]:after,
+*[id^="4"]:after,
+*[id^="5"]:after,
+*[id^="6"]:after,
+*[id^="7"]:after,
+*[id^="8"]:after,
+*[id^="9"]:after,
+*[id^="0"]:after {
+  background: #FFFF88;
+  content: 'ID cannot start with number.';
+}
+
 center:after,
 u:after,
 font:after {
@@ -295,21 +347,6 @@ img[src="#"] {
   outline: 5px solid #FF8888;
 }
 
-table:not([summary]),
-table th:not([scope]),
-table thead td,
-table > tr:first-child:last-child,
-table > tbody > tr:first-child:last-child,
-table > tbody:first-child,
-form > *:not(fieldset),
-fieldset > *:not(legend):first-child,
-map,
-br,
-b,
-i {
-  outline: 5px solid #88FF88;
-}
-
 table > tr,
 table > tbody + tfoot,
 table > *:not(thead):not(tfoot):not(tbody):not(tr):not(colgroup):not(caption),
@@ -318,7 +355,9 @@ table[bgcolor],
 table[border],
 table[cellpadding],
 table[cellspacing],
-table[width],
+*[width],
+*[height],
+*[border],
 img:not([alt]),
 a:not([href]),
 a[href="#"],
@@ -347,12 +386,47 @@ ol > *:not(li),
 ul > *:not(li),
 dl > *:not(dt):not(dd),
 iframe:not([title]),
+*[class^="1"],
+*[class^="2"],
+*[class^="3"],
+*[class^="4"],
+*[class^="5"],
+*[class^="6"],
+*[class^="7"],
+*[class^="8"],
+*[class^="9"],
+*[class^="0"],
+*[id^="1"],
+*[id^="2"],
+*[id^="3"],
+*[id^="4"],
+*[id^="5"],
+*[id^="6"],
+*[id^="7"],
+*[id^="8"],
+*[id^="9"],
+*[id^="0"],
 center,
 u,
 font,
 blink,
 marquee {
   outline: 5px solid #FFFF88;
+}
+
+table:not([summary]),
+table th:not([scope]),
+table thead td,
+table > tr:first-child:last-child,
+table > tbody > tr:first-child:last-child,
+table > tbody:first-child,
+form > *:not(fieldset),
+fieldset > *:not(legend):first-child,
+map,
+br,
+b,
+i {
+  outline: 5px solid #88FF88;
 }
 
 /*********/
