@@ -37,16 +37,21 @@ table th:not([scope]):after,
 table thead td:after,
 table > tbody:first-child:after,
 table > tbody + tfoot:after,
-table > tr:first-child:last-child:after,
-table > tbody > tr:first-child:last-child:after,
+table > tr:only-child:after,
+table > tbody > tr:only-child:after,
 table > *:not(thead):not(tfoot):not(tbody):not(tr):not(colgroup):not(caption):after,
 table[align]:after,
 table[bgcolor]:after,
 table[border]:after,
 table[cellpadding]:after,
 table[cellspacing]:after,
-table[width]:after,
+*[width]:after, /* Acceptable for transitional doctypes, but should probably be relegated to CSS */
+*[height]:after,
+*[border]:after,
 img:not([alt]):after,
+img:not([src]):after,
+img[src=""]:after,
+img[src="#"]:after,
 a:not([href]):after,
 a[href="#"]:after,
 a[href*=javascript\:]:after,
@@ -62,24 +67,46 @@ h3 div:after,
 h4 div:after,
 h5 div:after,
 h6 div:after,
-a div:after,
 span div:after,
-html[xmlns] a h1:after, /* Try to select only in XHTML documents (thanks, Thierry). */
+html[xmlns] a div:after, /* Try to select only in XHTML documents (thanks, Thierry). */
+html[xmlns] a h1:after,
 html[xmlns] a h2:after,
 html[xmlns] a h3:after,
 html[xmlns] a h4:after,
 html[xmlns] a h5:after,
 html[xmlns] a h6:after,
-ol > *:not(li),
-ul > *:not(li),
+ol > *:not(li):after,
+ul > *:not(li):after,
 dl > *:not(dt):not(dd):after,
 form > *:not(fieldset):after,
-fieldset *:not(legend):first-child:after,
+fieldset > *:not(legend):first-child:after,
 iframe:not([title]):after,
+*[class^="1"]:after,
+*[class^="2"]:after,
+*[class^="3"]:after,
+*[class^="4"]:after,
+*[class^="5"]:after,
+*[class^="6"]:after,
+*[class^="7"]:after,
+*[class^="8"]:after,
+*[class^="9"]:after,
+*[class^="0"]:after,
+*[id^="1"]:after,
+*[id^="2"]:after,
+*[id^="3"]:after,
+*[id^="4"]:after,
+*[id^="5"]:after,
+*[id^="6"]:after,
+*[id^="7"]:after,
+*[id^="8"]:after,
+*[id^="9"]:after,
+*[id^="0"]:after,
 center:after,
 u:after,
 font:after,
 map:after,
+br + *:not(br):before,
+br + br + *:before,
 b:after,
 i:after,
 blink:after,
@@ -117,7 +144,7 @@ table > tr:after {
 
 table th:not([scope]):after {
   background: #88FF88;
-  content: 'Should TH have a SCOPE attribute (ROW or COL)?.';
+  content: 'Should TH have a SCOPE attribute (ROW or COL)?  OK if using ID and HEADERS.';
 }
 
 table thead td:after {
@@ -135,8 +162,8 @@ table > tbody + tfoot:after {
   content: 'TBODY should come after TFOOT.';
 }
 
-table > tr:first-child:last-child:after,
-table > tbody > tr:first-child:last-child:after {
+table > tr:only-child:after,
+table > tbody > tr:only-child:after {
   background: #88FF88;
   content: 'Only one TR in TABLE.  Are you using it for layout?';
 }
@@ -151,7 +178,9 @@ table[bgcolor]:after,
 table[border]:after,
 table[cellpadding]:after,
 table[cellspacing]:after,
-table[width]:after {
+*[width]:after,
+*[height]:after,
+*[border]:after {
   background: #FFFF88;
   content: 'Element has inline style.';
 }
@@ -159,6 +188,13 @@ table[width]:after {
 img:not([alt]):after {
   background: #FFFF88;
   content: 'Image does not have an ALT attribute.';
+}
+
+img:not([src]):after,
+img[src=""]:after,
+img[src="#"]:after {
+  background: #FF8888;
+  content: 'IMG without proper SRC attribute.  Serious implications for some browsers.';
 }
 
 a[href="#"]:after,
@@ -196,8 +232,8 @@ h3 div:after,
 h4 div:after,
 h5 div:after,
 h6 div:after,
-a div:after,
 span div:after,
+html[xmlns] a div:after,
 html[xmlns] a h1:after,
 html[xmlns] a h2:after,
 html[xmlns] a h3:after,
@@ -224,7 +260,7 @@ form > *:not(fieldset):after {
   content: 'Should you be using a FIELDSET?';
 }
 
-fieldset *:not(legend):first-child:after {
+fieldset > *:not(legend):first-child:after {
   background: #88FF88;
   content: 'Should your FIELDSET be using a LEGEND?';
 }
@@ -232,6 +268,34 @@ fieldset *:not(legend):first-child:after {
 iframe:not([title]):after {
   background: #88FF88;
   content: 'IFRAME lacks TITLE attribute.';
+}
+
+*[class^="1"]:after,
+*[class^="2"]:after,
+*[class^="3"]:after,
+*[class^="4"]:after,
+*[class^="5"]:after,
+*[class^="6"]:after,
+*[class^="7"]:after,
+*[class^="8"]:after,
+*[class^="9"]:after,
+*[class^="0"]:after {
+  background: #FFFF88;
+  content: 'Class name cannot start with number.';
+}
+
+*[id^="1"]:after,
+*[id^="2"]:after,
+*[id^="3"]:after,
+*[id^="4"]:after,
+*[id^="5"]:after,
+*[id^="6"]:after,
+*[id^="7"]:after,
+*[id^="8"]:after,
+*[id^="9"]:after,
+*[id^="0"]:after {
+  background: #FFFF88;
+  content: 'ID cannot start with number.';
 }
 
 center:after,
@@ -245,6 +309,16 @@ font:after {
 map:after {
   background: #88FF88;
   content: 'Is MAP appropriate here?';
+}
+
+br + *:not(br):before {
+  background: #88FF88;
+  content: 'Is BR appropriate here?';
+}
+
+br + br + *:before {
+  background: #88FF88;
+  content: 'Should you be using a P tag?';
 }
 
 b:after,
@@ -267,19 +341,10 @@ marquee:after {
    element so it's easy to spot.  Use outline instead of border to avoid
    messing with the document flow.
 */
-
-table:not([summary]),
-table th:not([scope]),
-table thead td,
-table > tr:first-child:last-child,
-table > tbody > tr:first-child:last-child,
-table > tbody:first-child,
-form > *:not(fieldset),
-fieldset *:not(legend):first-child,
-map,
-b,
-i {
-  outline: 5px solid #88FF88;
+img:not([src]),
+img[src=""],
+img[src="#"] {
+  outline: 5px solid #FF8888;
 }
 
 table > tr,
@@ -290,7 +355,9 @@ table[bgcolor],
 table[border],
 table[cellpadding],
 table[cellspacing],
-table[width],
+*[width],
+*[height],
+*[border],
 img:not([alt]),
 a:not([href]),
 a[href="#"],
@@ -307,8 +374,8 @@ h3 div,
 h4 div,
 h5 div,
 h6 div,
-a div,
 span div,
+html[xmlns] a div,
 html[xmlns] a h1,
 html[xmlns] a h2,
 html[xmlns] a h3,
@@ -319,10 +386,62 @@ ol > *:not(li),
 ul > *:not(li),
 dl > *:not(dt):not(dd),
 iframe:not([title]),
+*[class^="1"],
+*[class^="2"],
+*[class^="3"],
+*[class^="4"],
+*[class^="5"],
+*[class^="6"],
+*[class^="7"],
+*[class^="8"],
+*[class^="9"],
+*[class^="0"],
+*[id^="1"],
+*[id^="2"],
+*[id^="3"],
+*[id^="4"],
+*[id^="5"],
+*[id^="6"],
+*[id^="7"],
+*[id^="8"],
+*[id^="9"],
+*[id^="0"],
 center,
 u,
 font,
 blink,
 marquee {
   outline: 5px solid #FFFF88;
+}
+
+table:not([summary]),
+table th:not([scope]),
+table thead td,
+table > tr:first-child:last-child,
+table > tbody > tr:first-child:last-child,
+table > tbody:first-child,
+form > *:not(fieldset),
+fieldset > *:not(legend):first-child,
+map,
+br,
+b,
+i {
+  outline: 5px solid #88FF88;
+}
+
+/*********/
+/* EXTRA */
+/*********/
+
+/* Stuff that helps in developing / debugging, but don't quite fit anywhere
+   else.
+*/
+
+body > img:only-child {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAgMAAAAOFJJnAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAlQTFRF/+Pj2tra2dnZ4Z9gVgAAAHxJREFUGBkFwUGKxDAQBDB9shqcuw2T/3TAc5+A95UruZv+IoNqvEWCavLFDB2M5vPgGpyFNOcB80cPJMxgHhLkQ4IxuBorpDA3Y+MazEfC2+gwgnOxHnSogb15F1JcGxmkcBb1AwlVqCIHadZGwt+NGmQhD1lIuB+scOUfnCk3BP0u5SsAAAAASUVORK5CYII=);
+  border: 50px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  display: block;
+  margin: 1em auto;
+  padding: 0;
 }
