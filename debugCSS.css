@@ -168,7 +168,7 @@ marquee:after,
 *[id*=\{]:after,
 *[id*=\}]:after,
 *[id*=\|]:after,
-*[id*=\`]:after, {
+*[id*=\`]:after {
   border: 1px solid #000;
   color: #000;
   display: block;
@@ -404,7 +404,7 @@ font:after {
 *[class*=\|]:after,
 *[class*=\`]:after {
   background: #FFFF88;
-  content: 'Class has an ambiguous character.';
+  content: 'Class has an illegal character.';
 }
 
 *[id*=\~]:after,
@@ -434,7 +434,7 @@ font:after {
 *[id*=\|]:after,
 *[id*=\`]:after {
   background: #FFFF88;
-  content: 'ID has an ambiguous character.';
+  content: 'ID has an illegal character.';
 }
 
 /* These may not be "wrong", but let's bug you anyway. */
