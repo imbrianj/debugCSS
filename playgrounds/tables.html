@@ -267,6 +267,131 @@
               </table>
             </li>
             <li>
+              <h4>table > colgroup ~ caption</h4>
+              <table summary="my table summary">
+                <colgroup></colgroup>
+                <caption>Caption after colgroup</caption>
+                <tbody>
+                  <tr><td>caption</td><td>after</td><td>colgroup</td></tr>
+                  <tr><td>please</td><td>test</td><td>me.</td></tr>
+                </tbody>
+              </table>
+            </li>
+            <li>
+              <h4>table > thead ~ colgroup</h4>
+              <table summary="my table summary">
+                <thead>
+                  <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
+                </thead>
+                <colgroup></colgroup>
+                <tbody>
+                  <tr><td>colgroup</td><td>after</td><td>thead</td></tr>
+                  <tr><td>please</td><td>test</td><td>me.</td></tr>
+                </tbody>
+              </table>
+            </li>
+            <li>
+              <h4>table > tfoot ~ colgroup</h4>
+              <table summary="my table summary">
+                <thead>
+                  <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
+                </thead>
+                <tfoot></tfoot>
+                <colgroup></colgroup>
+                <tbody>
+                  <tr><td>colgroup</td><td>after</td><td>tfoot</td></tr>
+                  <tr><td>please</td><td>test</td><td>me.</td></tr>
+                </tbody>
+              </table>
+            </li>
+            <li>
+              <h4>table > tbody ~ colgroup</h4>
+              <table summary="my table summary">
+                <tbody>
+                  <tr><td>colgroup</td><td>after</td><td>tbody</td></tr>
+                  <tr><td>please</td><td>test</td><td>me.</td></tr>
+                </tbody>
+                <colgroup></colgroup>
+              </table>
+            </li>
+            <li>
+              <h4>table > thead ~ caption</h4>
+              <table summary="my table summary">
+                <thead>
+                  <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
+                </thead>
+                <caption>My table caption</caption>
+                <tbody>
+                  <tr><td>caption</td><td>after</td><td>thead</td></tr>
+                  <tr><td>please</td><td>test</td><td>me.</td></tr>
+                </tbody>
+              </table>
+            </li>
+            <li>
+              <h4>table > tfoot ~ caption</h4>
+              <table summary="my table summary">
+                <tfoot></tfoot>
+                <caption>My table caption</caption>
+                <tbody>
+                  <tr><td>caption</td><td>after</td><td>tfoot</td></tr>
+                  <tr><td>please</td><td>test</td><td>me.</td></tr>
+                </tbody>
+              </table>
+            </li>
+            <li>
+              <h4>table > tbody ~ caption</h4>
+              <table summary="my table summary">
+                <thead>
+                  <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>caption</td><td>after</td><td>tbody</td></tr>
+                  <tr><td>please</td><td>test</td><td>me.</td></tr>
+                </tbody>
+                <caption>My table caption</caption>
+              </table>
+            </li>
+            <li>
+              <h4>table > tfoot ~ thead</h4>
+              <table summary="my table summary">
+                <tfoot></tfoot>
+                <thead>
+                  <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>thead</td><td>after</td><td>tfoot</td></tr>
+                  <tr><td>please</td><td>test</td><td>me.</td></tr>
+                </tbody>
+              </table>
+            </li>
+            <li>
+              <h4>table > tbody ~ tfoot</h4>
+              <table summary="my table summary">
+                <thead>
+                  <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>tfoot</td><td>after</td><td>tbody</td></tr>
+                  <tr><td>please</td><td>test</td><td>me.</td></tr>
+                </tbody>
+                <tfoot>
+                  <tr><td>tfoot</td><td>should come before</td><td>tbody</td><td>
+                </tfoot>
+              </table>
+            </li>
+            <li>
+              <h4>table > tbody ~ thead</h4>
+              <table summary="my table summary">
+                <tbody>
+                  <tr><td>thead</td><td>after</td><td>tbody</td></tr>
+                  <tr><td>please</td><td>test</td><td>me.</td></tr>
+                </tbody>
+                <thead>
+                  <tr><th scope="col">thead</th><th scope="col">should come before</th><th scope="col">tbody</th></tr>
+                </thead>
+              </table>
+            </li>
+            <li>
               <h4>table > tbody:first-child</h4>
               <table summary="my table summary">
                 <tbody>
@@ -274,21 +399,6 @@
                   <tr><td>no</td><td>thead</td><td>tfoot</td></tr>
                   <tr><td>please</td><td>test</td><td>me.</td></tr>
                 </tbody>
-              </table>
-            </li>
-            <li>
-              <h4>table > tbody + tfoot</h4>
-              <table summary="my table summary">
-                <thead>
-                  <tr><td scope="col">I'm</td><td scope="col">a</td><td scope="col">table</td></tr>
-                </thead>
-                <tbody>
-                  <tr><td>tfoot</td><td>after</td><td>tbody</td></tr>
-                  <tr><td>please</td><td>test</td><td>me.</td></tr>
-                </tbody>
-                <tfoot>
-                  <tr><td>tfoot</td><td>should come before</td></td><td>
-                </tfoot>
               </table>
             </li>
             <li>
@@ -320,6 +430,21 @@
                 </thead>
                 <tbody>
                   <tr><td>non-valid tag</td><td>as child</td><td>of table</td></tr>
+                  <tr><td>please</td><td>test</td><td>me.</td></tr>
+                </tbody>
+              </table>
+            </li>
+            <li>
+              <h4>colgroup *:not(col)</h4>
+              <table summary="my table summary">
+                <colgroup>
+                  <h4>This doesn't belong here</h4>
+                </colgroup>
+                <thead>
+                  <tr><td scope="col">I'm</td><td scope="col">a</td><td scope="col">table</td></tr>
+                </thead>
+                <tbody>
+                  <tr><td>colgroup</td><td>with</td><td>invalid</td></tr>
                   <tr><td>please</td><td>test</td><td>me.</td></tr>
                 </tbody>
               </table>

@@ -1,0 +1,774 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="keywords" content="CSS, CSS Development, Web Development, Cascading Style Sheets, Web Styles" />
+  <meta name="description" content="debugCSS: (X)HTML debugging tool built with CSS" />
+  <title>debugCSS : (X)HTML debugging tool built with CSS</title>
+  <style type="text/css">
+    html,
+    body,
+    div,
+    span,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    pre,
+    a,
+    code,
+    em,
+    dl,
+    dt,
+    dd,
+    ol,
+    ul,
+    li {
+      border: 0;
+      font-family: inherit;
+      font-size: 100%;
+      font-style: inherit;
+      font-weight: inherit;
+      margin: 0;
+      outline: 0;
+      padding: 0;
+      vertical-align: baseline;
+    }
+
+    :focus {
+      outline: #000 dotted thin;
+    }
+
+    a {
+      color: #286EA0;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    a:visited {
+      color: #6B899F;
+    }
+
+    body {
+      background: #FFF;
+      color: #000;
+      font-family: helvetica;
+      line-height: 1.3;
+    }
+
+    ol,
+    ul {
+      list-style: none;
+    }
+
+    p,
+    pre,
+    .mod li {
+      margin: .5em 0;
+    }
+
+    code,
+    pre {
+      font-family: monospace;
+    }
+
+    pre {
+      border: 1px solid #CCC;
+      -moz-border-radius: .5em;
+      -webkit-border-radius: .5em;
+      border-radius: .5em;
+      padding: .5em;
+    }
+
+    pre:hover {
+      background-color: #EAEAEA;
+      -moz-box-shadow: 3px 3px 5px rgba(17,17,17,.1);
+      -webkit-box-shadow: 3px 3px 5px rgba(17,17,17,.1);
+      box-shadow: 3px 3px 5px rgba(17,17,17,.1);
+    }
+
+    dl {
+      margin-bottom: .5em;
+    }
+
+    dt {
+      font-weight: bold;
+      margin-top: .5em;
+    }
+
+    dd {
+      text-indent: 2em;
+    }
+
+    .wrapper {
+      margin: 1em auto;
+      max-width: 1280px;
+      min-width: 640px;
+      width: 80%;
+    }
+
+    #hd h1 {
+      font-size: 2em;
+      text-shadow: 3px 3px 5px rgba(17,17,17,.1);
+    }
+
+    .mod .hd h3 {
+      border-bottom: 1px solid #CCC;
+      font-size: 1.5em;
+      margin-bottom: .5em;
+      text-shadow: 3px 3px 5px rgba(17,17,17,.1);
+    }
+
+    #hd,
+    .mod {
+      margin-bottom: 3em;
+    }
+
+    cite {
+      font-style: italic;
+    }
+
+    #install .bd a.install {
+      background: #4970A7;
+      background-image: -moz-linear-gradient(top, #4B71A9 0%, #2A5797 50%, #235293 54%, #14468B 100%);
+      background-image: -webkit-linear-gradient(top, #4B71A9 0%, #2A5797 50%, #235293 54%, #14468B 100%);
+      border: 1px solid #14468B;
+      -moz-border-radius: 3px;
+      -webkit-border-radius: 3px;
+      border-radius: 3px;
+      -moz-box-shadow: 0px 1px 1px rgba(242, 242, 242, 0.7);
+      -webkit-box-shadow: 0px 1px 1px rgba(242, 242, 242, 0.7);
+      box-shadow: 0px 1px 1px rgba(242, 242, 242, 0.7);
+      color: #FFF;
+      cursor: pointer;
+      display: block;
+      *display: inline;
+      padding: 1em;
+      text-align: center;
+      width: 5em;
+      zoom: 1;
+    }
+
+    .mod ul {
+      list-style: disc outside none;
+      padding-left: 3em;
+    }
+
+    #playground li {
+      clear: left;
+      margin-top: 20px;
+    }
+
+    #playground table,
+    #playground th,
+    #playground td {
+      border: 1px dotted #000;
+    }
+
+    #playground h4 {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <a href="https://github.com/yahoo/debugCSS"><img alt="Fork me on GitHub" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" style="position: absolute; top: 0; right: 0; border: 0;"></a>
+  <div class="wrapper">
+    <div id="hd">
+      <h1>debugCSS : (X)HTML debugging tool built with CSS</h1>
+    </div>
+    <div id="bd">
+      <div class="mod" id="summary">
+        <div class="hd">
+          <h3>Summary</h3>
+        </div>
+        <div class="bd">
+          <p>
+            debugCSS is meant to be loaded on an existing page to highlight potentially broken, malformed or legacy (X)HTML.
+          </p>
+          <p>
+            Not all "errors" are created equally, so they are color coded to highlight severity.  Green is "probably not a big problem", yellow is "worth looking at" and red is "you really should fix this."
+          </p>
+        </div>
+      </div>
+
+      <div class="mod" id="install">
+        <div class="hd">
+          <h3>Install</h3>
+        </div>
+        <div class="bd">
+          <p>
+            Click and drag the link below to your bookmark toolbar to install - or right click "Bookmark This Link".
+          </p>
+          <a href="javascript:(function(d,i,l){l=d.getElementById(i);if(l){l.parentNode.removeChild(l);return;}l=d.createElement('link');l.id=i;l.rel='stylesheet';l.type='text/css';l.href='http://yahoo.github.io/debugCSS/debugCSS.css';d.getElementsByTagName('head')[0].appendChild(l);}(document,'debugCSS'))" class="install">debugCSS</a>
+          <p>
+            Get the source code on GitHub : <a href="https://github.com/yahoo/debugCSS">yahoo/debugCSS</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="mod" id="playground">
+        <div class="hd">
+          <h3>Class / ID Namespace Playground</h3>
+        </div>
+        <div class="bd">
+          <ul>
+            <li>
+              <h4>*[class^="1"]</h4>
+              <span class="1badclass">Class name starting with number</span>
+            </li>
+            <li>
+              <h4>*[class^="2"]</h4>
+              <span class="2badclass">Class name starting with number</span>
+            </li>
+            <li>
+              <h4>*[class^="3"]</h4>
+              <span class="3badclass">Class name starting with number</span>
+            </li>
+            <li>
+              <h4>*[class^="4"]</h4>
+              <span class="4badclass">Class name starting with number</span>
+            </li>
+            <li>
+              <h4>*[class^="5"]</h4>
+              <span class="5badclass">Class name starting with number</span>
+            </li>
+            <li>
+              <h4>*[class^="6"]</h4>
+              <span class="6badclass">Class name starting with number</span>
+            </li>
+            <li>
+              <h4>*[class^="7"]</h4>
+              <span class="7badclass">Class name starting with number</span>
+            </li>
+            <li>
+              <h4>*[class^="8"]</h4>
+              <span class="9badclass">Class name starting with number</span>
+            </li>
+            <li>
+              <h4>*[class^="9"]</h4>
+              <span class="9badclass">Class name starting with number</span>
+            </li>
+            <li>
+              <h4>*[class^="0"]</h4>
+              <span class="0badclass">Class name starting with number</span>
+            </li>
+            <li>
+              <h4>*[id^="1"]</h4>
+              <span id="1badid">ID starting with number</span>
+            </li>
+            <li>
+              <h4>*[id^="2"]</h4>
+              <span id="2badid">ID starting with number</span>
+            </li>
+            <li>
+              <h4>*[id^="3"]</h4>
+              <span id="3badid">ID starting with number</span>
+            </li>
+            <li>
+              <h4>*[id^="4"]</h4>
+              <span id="4badid">ID starting with number</span>
+            </li>
+            <li>
+              <h4>*[id^="5"]</h4>
+              <span id="5badid">ID starting with number</span>
+            </li>
+            <li>
+              <h4>*[id^="6"]</h4>
+              <span id="6badid">ID starting with number</span>
+            </li>
+            <li>
+              <h4>*[id^="7"]</h4>
+              <span id="7badid">ID starting with number</span>
+            </li>
+            <li>
+              <h4>*[id^="8"]</h4>
+              <span id="8badid">ID starting with number</span>
+            </li>
+            <li>
+              <h4>*[id^="9"]</h4>
+              <span id="9badid">ID starting with number</span>
+            </li>
+            <li>
+              <h4>*[id^="0"]</h4>
+              <span id="0badid">ID starting with number</span>
+            </li>
+
+            <li>
+              <h4>*[class*=\\]</h4>
+              <span class="test\class">Class contains a \</span>
+            </li>
+            <li>
+              <h4>*[class*=\.]</h4>
+              <span class="test.class">Class contains a .</span>
+            </li>
+            <li>
+              <h4>*[class*=\#]</h4>
+              <span class="test#class">Class contains a #</span>
+            </li>
+            <li>
+              <h4>*[class*=\~]</h4>
+              <span class="test~class">Class contains a ~</span>
+            </li>
+            <li>
+              <h4>*[class*=\!]</h4>
+              <span class="test~class">Class contains a !</span>
+            </li>
+            <li>
+              <h4>*[class*=\@]</h4>
+              <span class="test@class">Class contains a @</span>
+            </li>
+            <li>
+              <h4>*[class*=\$]</h4>
+              <span class="test$class">Class contains a $</span>
+            </li>
+            <li>
+              <h4>*[class*=\%]</h4>
+              <span class="test%class">Class contains a %</span>
+            </li>
+            <li>
+              <h4>*[class*=\^]</h4>
+              <span class="test^class">Class contains a ^</span>
+            </li>
+            <li>
+              <h4>*[class*=\&]</h4>
+              <span class="test&class">Class contains a &amp;</span>
+            </li>
+            <li>
+              <h4>*[class*=\*]</h4>
+              <span class="test*class">Class contains a *</span>
+            </li>
+            <li>
+              <h4>*[class*=\(]</h4>
+              <span class="test(class">Class contains a (</span>
+            </li>
+            <li>
+              <h4>*[class*=\)]</h4>
+              <span class="test)class">Class contains a )</span>
+            </li>
+            <li>
+              <h4>*[class*=\=]</h4>
+              <span class="test=class">Class contains a =</span>
+            </li>
+            <li>
+              <h4>*[class*=\,]</h4>
+              <span class="test,class">Class contains a ,</span>
+            </li>
+            <li>
+              <h4>*[class*=\/]</h4>
+              <span class="test/class">Class contains a /</span>
+            </li>
+            <li>
+              <h4>*[class*=\']</h4>
+              <span class="test'class">Class contains a '</span>
+            </li>
+            <li>
+              <h4>*[class*=\;]</h4>
+              <span class="test;class">Class contains a ;</span>
+            </li>
+            <li>
+              <h4>*[class*=\:]</h4>
+              <span class="test:class">Class contains a :</span>
+            </li>
+            <li>
+              <h4>*[class*=\?]</h4>
+              <span class="test?class">Class contains a ?</span>
+            </li>
+            <li>
+              <h4>*[class*=\>]</h4>
+              <span class="test>class">Class contains a &gt;</span>
+            </li>
+            <li>
+              <h4>*[class*=\<]</h4>
+              <span class="test<class">Class contains a &lt;</span>
+            </li>
+            <li>
+              <h4>*[class*=\[]</h4>
+              <span class="test[class">Class contains a [</span>
+            </li>
+            <li>
+              <h4>*[class*=\]]</h4>
+              <span class="test]class">Class contains a ]</span>
+            </li>
+            <li>
+              <h4>*[class*=\{]</h4>
+              <span class="test{class">Class contains a {</span>
+            </li>
+            <li>
+              <h4>*[class*=\}]</h4>
+              <span class="test}class">Class contains a }</span>
+            </li>
+            <li>
+              <h4>*[class*=\|]</h4>
+              <span class="test|class">Class contains a |</span>
+            </li>
+            <li>
+              <h4>*[class*=\`]</h4>
+              <span class="test`class">Class contains a `</span>
+            </li>
+
+            <li>
+              <h4>*[id*=\\]</h4>
+              <span id="test\name">ID contains a \</span>
+            </li>
+            <li>
+              <h4>*[id*=\.]</h4>
+              <span id="dot.name">ID contains a .</span>
+            </li>
+            <li>
+              <h4>*[id*=\#]</h4>
+              <span id="hash#name">ID contains a #</span>
+            </li>
+            <li>
+              <h4>*[id*=\~]</h4>
+              <span id="test~class">ID contains a ~</span>
+            </li>
+            <li>
+              <h4>*[id*=\!]</h4>
+              <span id="test~class">ID contains a !</span>
+            </li>
+            <li>
+              <h4>*[id*=\@]</h4>
+              <span id="test@class">ID contains a @</span>
+            </li>
+            <li>
+              <h4>*[id*=\$]</h4>
+              <span id="test$class">ID contains a $</span>
+            </li>
+            <li>
+              <h4>*[id*=\%]</h4>
+              <span id="test%class">ID contains a %</span>
+            </li>
+            <li>
+              <h4>*[id*=\^]</h4>
+              <span id="test^class">ID contains a ^</span>
+            </li>
+            <li>
+              <h4>*[id*=\&]</h4>
+              <span id="test&class">ID contains a &amp;</span>
+            </li>
+            <li>
+              <h4>*[id*=\*]</h4>
+              <span id="test*class">ID contains a *</span>
+            </li>
+            <li>
+              <h4>*[id*=\(]</h4>
+              <span id="test(class">ID contains a (</span>
+            </li>
+            <li>
+              <h4>*[id*=\)]</h4>
+              <span id="test)class">ID contains a )</span>
+            </li>
+            <li>
+              <h4>*[id*=\=]</h4>
+              <span id="test=class">ID contains a =</span>
+            </li>
+            <li>
+              <h4>*[id*=\,]</h4>
+              <span id="test,class">ID contains a ,</span>
+            </li>
+            <li>
+              <h4>*[id*=\/]</h4>
+              <span id="test/class">ID contains a /</span>
+            </li>
+            <li>
+              <h4>*[id*=\']</h4>
+              <span id="test'class">ID contains a '</span>
+            </li>
+            <li>
+              <h4>*[id*=\;]</h4>
+              <span id="test;class">ID contains a ;</span>
+            </li>
+            <li>
+              <h4>*[id*=\:]</h4>
+              <span id="test:class">ID contains a :</span>
+            </li>
+            <li>
+              <h4>*[id*=\?]</h4>
+              <span id="test?class">ID contains a ?</span>
+            </li>
+            <li>
+              <h4>*[id*=\>]</h4>
+              <span id="test>ID">ID contains a &gt;</span>
+            </li>
+            <li>
+              <h4>*[id*=\<]</h4>
+              <span id="test<class">ID contains a &lt;</span>
+            </li>
+            <li>
+              <h4>*[id*=\[]</h4>
+              <span id="test[class">ID contains a [</span>
+            </li>
+            <li>
+              <h4>*[id*=\]]</h4>
+              <span id="test]class">ID contains a ]</span>
+            </li>
+            <li>
+              <h4>*[id*=\{]</h4>
+              <span id="test{class">ID contains a {</span>
+            </li>
+            <li>
+              <h4>*[id*=\}]</h4>
+              <span id="test}class">ID contains a }</span>
+            </li>
+            <li>
+              <h4>*[id*=\|]</h4>
+              <span id="test|class">ID contains a |</span>
+            </li>
+            <li>
+              <h4>*[id*=\`]</h4>
+              <span id="test`class">ID contains a `</span>
+            </li>
+            <li>
+              <h4>*[class*=left]</h4>
+              <span class="foo-left-bar">Class contains "left"</span>
+            </li>
+            <li>
+              <h4>*[class*=right]</h4>
+              <span class="foo-right-bar">Class contains "right"</span>
+            </li>
+            <li>
+              <h4>*[class*=top]</h4>
+              <span class="foo-top-bar">Class contains "top"</span>
+            </li>
+            <li>
+              <h4>*[class*=bottom]</h4>
+              <span class="foo-bottom-bar">Class contains "bottom"</span>
+            </li>
+            <li>
+              <h4>*[class*=center]</h4>
+              <span class="foo-center-bar">Class contains "center"</span>
+            </li>
+            <li>
+              <h4>*[class*=clear]</h4>
+              <span class="foo-clear-bar">Class contains "clear"</span>
+            </li>
+            <li>
+              <h4>*[class*=float]</h4>
+              <span class="foo-float-bar">Class contains "float"</span>
+            </li>
+            <li>
+              <h4>*[class*=large]</h4>
+              <span class="foo-large-bar">Class contains "large"</span>
+            </li>
+            <li>
+              <h4>*[class*=small]</h4>
+              <span class="foo-small-bar">Class contains "small"</span>
+            </li>
+            <li>
+              <h4>*[class*=red]</h4>
+              <span class="foo-red-bar">Class contains "red"</span>
+            </li>
+            <li>
+              <h4>*[class*=blue]</h4>
+              <span class="foo-blue-bar">Class contains "blue"</span>
+            </li>
+            <li>
+              <h4>*[class*=green]</h4>
+              <span class="foo-green-bar">Class contains "green"</span>
+            </li>
+            <li>
+              <h4>*[class*=yellow]</h4>
+              <span class="foo-yellow-bar">Class contains "yellow"</span>
+            </li>
+            <li>
+              <h4>*[class*=white]</h4>
+              <span class="foo-white-bar">Class contains "white"</span>
+            </li>
+            <li>
+              <h4>*[class*=black]</h4>
+              <span class="foo-black-bar">Class contains "black"</span>
+            </li>
+            <li>
+              <h4>*[class*=Left]</h4>
+              <span class="foo-Left-bar">Class contains "Left"</span>
+            </li>
+            <li>
+              <h4>*[class*=Right]</h4>
+              <span class="foo-Right-bar">Class contains "Right"</span>
+            </li>
+            <li>
+              <h4>*[class*=Top]</h4>
+              <span class="foo-Top-bar">Class contains "Top"</span>
+            </li>
+            <li>
+              <h4>*[class*=Bottom]</h4>
+              <span class="foo-Bottom-bar">Class contains "Bottom"</span>
+            </li>
+            <li>
+              <h4>*[class*=Center]</h4>
+              <span class="foo-Center-bar">Class contains "Center"</span>
+            </li>
+            <li>
+              <h4>*[class*=Clear]</h4>
+              <span class="foo-Clear-bar">Class contains "Clear"</span>
+            </li>
+            <li>
+              <h4>*[class*=Float]</h4>
+              <span class="foo-Float-bar">Class contains "Float"</span>
+            </li>
+            <li>
+              <h4>*[class*=Large]</h4>
+              <span class="foo-Large-bar">Class contains "Large"</span>
+            </li>
+            <li>
+              <h4>*[class*=Small]</h4>
+              <span class="foo-Small-bar">Class contains "Small"</span>
+            </li>
+            <li>
+              <h4>*[class*=Red]</h4>
+              <span class="foo-Red-bar">Class contains "Red"</span>
+            </li>
+            <li>
+              <h4>*[class*=Blue]</h4>
+              <span class="foo-Blue-bar">Class contains "Blue"</span>
+            </li>
+            <li>
+              <h4>*[class*=Green]</h4>
+              <span class="foo-Green-bar">Class contains "Green"</span>
+            </li>
+            <li>
+              <h4>*[class*=Yellow]</h4>
+              <span class="foo-Yellow-bar">Class contains "Yellow"</span>
+            </li>
+            <li>
+              <h4>*[class*=White]</h4>
+              <span class="foo-White-bar">Class contains "White"</span>
+            </li>
+            <li>
+              <h4>*[class*=Black]</h4>
+              <span class="foo-Black-bar">Class contains "Black"</span>
+            </li>
+            <li>
+              <h4>*[id*=left]</h4>
+              <span id="foo-left-bar">ID contains "left"</span>
+            </li>
+            <li>
+              <h4>*[id*=right]</h4>
+              <span id="foo-right-bar">ID contains "right"</span>
+            </li>
+            <li>
+              <h4>*[id*=top]</h4>
+              <span id="foo-top-bar">ID contains "top"</span>
+            </li>
+            <li>
+              <h4>*[id*=bottom]</h4>
+              <span id="foo-bottom-bar">ID contains "bottom"</span>
+            </li>
+            <li>
+              <h4>*[id*=center]</h4>
+              <span id="foo-center-bar">ID contains "center"</span>
+            </li>
+            <li>
+              <h4>*[id*=clear]</h4>
+              <span id="foo-clear-bar">ID contains "clear"</span>
+            </li>
+            <li>
+              <h4>*[id*=float]</h4>
+              <span id="foo-float-bar">ID contains "float"</span>
+            </li>
+            <li>
+              <h4>*[id*=large]</h4>
+              <span id="foo-large-bar">ID contains "large"</span>
+            </li>
+            <li>
+              <h4>*[id*=small]</h4>
+              <span id="foo-small-bar">ID contains "small"</span>
+            </li>
+            <li>
+              <h4>*[id*=red]</h4>
+              <span id="foo-red-bar">ID contains "red"</span>
+            </li>
+            <li>
+              <h4>*[id*=blue]</h4>
+              <span id="foo-blue-bar">ID contains "blue"</span>
+            </li>
+            <li>
+              <h4>*[id*=green]</h4>
+              <span id="foo-green-bar">ID contains "green"</span>
+            </li>
+            <li>
+              <h4>*[id*=yellow]</h4>
+              <span id="foo-yellow-bar">ID contains "yellow"</span>
+            </li>
+            <li>
+              <h4>*[id*=white]</h4>
+              <span id="foo-white-bar">ID contains "white"</span>
+            </li>
+            <li>
+              <h4>*[id*=black]</h4>
+              <span id="foo-black-bar">ID contains "black"</span>
+            </li>
+            <li>
+              <h4>*[id*=Left]</h4>
+              <span id="foo-Left-bar">ID contains "Left"</span>
+            </li>
+            <li>
+              <h4>*[id*=Right]</h4>
+              <span id="foo-Right-bar">ID contains "Right"</span>
+            </li>
+            <li>
+              <h4>*[id*=Top]</h4>
+              <span id="foo-Top-bar">ID contains "Top"</span>
+            </li>
+            <li>
+              <h4>*[id*=Bottom]</h4>
+              <span id="foo-Bottom-bar">ID contains "Bottom"</span>
+            </li>
+            <li>
+              <h4>*[id*=Center]</h4>
+              <span id="foo-Center-bar">ID contains "Center"</span>
+            </li>
+            <li>
+              <h4>*[id*=Clear]</h4>
+              <span id="foo-Clear-bar">ID contains "Clear"</span>
+            </li>
+            <li>
+              <h4>*[id*=Float]</h4>
+              <span id="foo-Float-bar">ID contains "Float"</span>
+            </li>
+            <li>
+              <h4>*[id*=Large]</h4>
+              <span id="foo-Large-bar">ID contains "Large"</span>
+            </li>
+            <li>
+              <h4>*[id*=Small]</h4>
+              <span id="foo-Small-bar">ID contains "Small"</span>
+            </li>
+            <li>
+              <h4>*[id*=Red]</h4>
+              <span id="foo-Red-bar">ID contains "Red"</span>
+            </li>
+            <li>
+              <h4>*[id*=Blue]</h4>
+              <span id="foo-Blue-bar">ID contains "Blue"</span>
+            </li>
+            <li>
+              <h4>*[id*=Green]</h4>
+              <span id="foo-Green-bar">ID contains "Green"</span>
+            </li>
+            <li>
+              <h4>*[id*=Yellow]</h4>
+              <span id="foo-Yellow-bar">ID contains "Yellow"</span>
+            </li>
+            <li>
+              <h4>*[id*=White]</h4>
+              <span id="foo-White-bar">ID contains "White"</span>
+            </li>
+            <li>
+              <h4>*[id*=Black]</h4>
+              <span id="foo-Black-bar">ID contains "Black"</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
