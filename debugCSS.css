@@ -35,11 +35,21 @@ table:not([summary]):after,
 table > tr:after,
 table th:not([scope]):after,
 table thead td:after,
+table > colgroup ~ caption:after,
+table > thead ~ colgroup:after,
+table > tfoot ~ colgroup:after,
+table > tbody ~ colgroup:after,
+table > thead ~ caption:after,
+table > tfoot ~ caption:after,
+table > tbody ~ caption:after,
 table > tbody:first-child:after,
-table > tbody + tfoot:after,
+table > tfoot ~ thead:after,
+table > tbody ~ tfoot:after,
+table > tbody ~ thead:after,
 table > tr:only-child:after,
 table > tbody > tr:only-child:after,
 table > *:not(thead):not(tfoot):not(tbody):not(tr):not(colgroup):not(caption):after,
+colgroup *:not(col):after,
 table[align]:after,
 table[bgcolor]:after,
 table[border]:after,
@@ -48,6 +58,10 @@ table[cellspacing]:after,
 *[width]:after, /* Acceptable for transitional doctypes, but should probably be relegated to CSS */
 *[height]:after,
 *[border]:after,
+div:empty:after,
+span:empty:after,
+p:empty:after,
+a a:after,
 img:not([alt]):after,
 img:not([src]):after,
 img[src=""]:after,
@@ -111,6 +125,66 @@ marquee:after,
 *[id^="8"]:after,
 *[id^="9"]:after,
 *[id^="0"]:after,
+*[class*=left]:after,
+*[class*=right]:after,
+*[class*=top]:after,
+*[class*=bottom]:after,
+*[class*=center]:after,
+*[class*=clear]:after,
+*[class*=float]:after,
+*[class*=large]:after,
+*[class*=small]:after,
+*[class*=red]:after,
+*[class*=blue]:after,
+*[class*=green]:after,
+*[class*=yellow]:after,
+*[class*=white]:after,
+*[class*=black]:after,
+*[class*=Left]:after,
+*[class*=Right]:after,
+*[class*=Top]:after,
+*[class*=Bottom]:after,
+*[class*=Center]:after,
+*[class*=Clear]:after,
+*[class*=Float]:after,
+*[class*=Large]:after,
+*[class*=Small]:after,
+*[class*=Red]:after,
+*[class*=Blue]:after,
+*[class*=Green]:after,
+*[class*=Yellow]:after,
+*[class*=White]:after,
+*[class*=Black]:after,
+*[id*=left]:after,
+*[id*=right]:after,
+*[id*=top]:after,
+*[id*=bottom]:after,
+*[id*=center]:after,
+*[id*=clear]:after,
+*[id*=float]:after,
+*[id*=large]:after,
+*[id*=small]:after,
+*[id*=red]:after,
+*[id*=blue]:after,
+*[id*=green]:after,
+*[id*=yellow]:after,
+*[id*=white]:after,
+*[id*=black]:after,
+*[id*=Left]:after,
+*[id*=Right]:after,
+*[id*=Top]:after,
+*[id*=Bottom]:after,
+*[id*=Center]:after,
+*[id*=Clear]:after,
+*[id*=Float]:after,
+*[id*=Large]:after,
+*[id*=Small]:after,
+*[id*=Red]:after,
+*[id*=Blue]:after,
+*[id*=Green]:after,
+*[id*=Yellow]:after,
+*[id*=White]:after,
+*[id*=Black]:after,
 *[class*=\\]:after,
 *[class*=\.]:after,
 *[class*=\#]:after,
@@ -197,17 +271,36 @@ table:not([summary]):after {
 
 table > tr:after {
   background: #FFFF88;
-  content: 'TABLE does not have a TBODY.';
+  content: 'TABLE does not have a TBODY';
 }
 
 table th:not([scope]):after {
   background: #88FF88;
-  content: 'Should TH have a SCOPE attribute (ROW or COL)?  OK if using ID and HEADERS.';
+  content: 'Should TH have a SCOPE attribute (ROW or COL)?  OK if using ID and HEADERS';
 }
 
 table thead td:after {
   background: #88FF88;
-  content: 'Cells in THEAD should be TH.';
+  content: 'Cells in THEAD should be TH';
+}
+
+table > colgroup ~ caption:after {
+  background: #FFFF88;
+  content: 'CAPTION must come before COLGROUP';
+}
+
+table > thead ~ colgroup:after,
+table > tfoot ~ colgroup:after,
+table > tbody ~ colgroup:after {
+  background: #FFFF88;
+  content: 'COLGROUP must come before THEAD, TFOOT and TBODY';
+}
+
+table > thead ~ caption:after,
+table > tfoot ~ caption:after,
+table > tbody ~ caption:after {
+  background: #FFFF88;
+  content: 'CAPTION must come before THEAD, TFOOT and TBODY';
 }
 
 table > tbody:first-child:after {
@@ -215,9 +308,19 @@ table > tbody:first-child:after {
   content: 'Do you need a THEAD or TFOOT?';
 }
 
-table > tbody + tfoot:after {
+table > tfoot ~ thead:after {
   background: #FFFF88;
-  content: 'TBODY should come after TFOOT.';
+  content: 'TFOOT should come after THEAD';
+}
+
+table > tbody ~ tfoot:after {
+  background: #FFFF88;
+  content: 'TBODY should come after TFOOT';
+}
+
+table > tbody ~ thead:after {
+  background: #FFFF88;
+  content: 'TBODY should come after THEAD';
 }
 
 table > tr:only-child:after,
@@ -231,6 +334,11 @@ table > *:not(thead):not(tfoot):not(tbody):not(tr):not(colgroup):not(caption):af
   content: 'Only THEAD/TFOOT/TBODY/COLGROUP/CAPTION/TR can be children of a TABLE';
 }
 
+colgroup *:not(col):after {
+  background: #FFFF88;
+  content: 'Only COLs can be children of COLGROUP';
+}
+
 table[align]:after,
 table[bgcolor]:after,
 table[border]:after,
@@ -240,25 +348,37 @@ table[cellspacing]:after,
 *[height]:after,
 *[border]:after {
   background: #FFFF88;
-  content: 'Element has inline style.';
+  content: 'Element has inline style';
+}
+
+div:empty:after,
+span:empty:after,
+p:empty:after {
+  background: #FFFF88;
+  content: 'Element has no content. Is this necessary?';
+}
+
+a a:after {
+  background: #FF8888;
+  content: 'A tag within another A tag - this looks like a bug';
 }
 
 img:not([alt]):after {
   background: #FFFF88;
-  content: 'Image does not have an ALT attribute.';
+  content: 'Image does not have an ALT attribute';
 }
 
 img:not([src]):after,
 img[src=""]:after,
 img[src="#"]:after {
   background: #FF8888;
-  content: 'IMG without proper SRC attribute.  Serious implications for some browsers.';
+  content: 'IMG without proper SRC attribute.  Serious implications for some browsers';
 }
 
 a[href="#"]:after,
 a:not([href]):after {
   background: #FFFF88;
-  content: 'Anchor tag is # or does not exist - does not degrade gracefully.';
+  content: 'Anchor tag is # or does not exist - does not degrade gracefully';
 }
 
 a[href*=javascript\:]:after,
@@ -266,7 +386,7 @@ a[onclick]:after,
 a[onmouseover]:after,
 a[onmouseout]:after {
   background: #FFFF88;
-  content: 'Inline JS on anchor.';
+  content: 'Inline JS on anchor';
 }
 
 label:not([for]):after {
@@ -276,12 +396,12 @@ label:not([for]):after {
 
 nav:not([role]):after {
   background: #FFFF88;
-  content: 'NAV element should have a ROLE attribute.';
+  content: 'NAV element should have a ROLE attribute';
 }
 
 div[role="img"]:not([aria-label]):after {
   background: #FFFF88;
-  content: 'DIV used as image should have ARIA-LABEL.';
+  content: 'DIV used as image should have ARIA-LABEL';
 }
 
 h1 div:after,
@@ -299,7 +419,7 @@ html[xmlns] a h4:after,
 html[xmlns] a h5:after,
 html[xmlns] a h6:after {
   background: #FFFF88;
-  content: 'Block level element within inline element.';
+  content: 'Block level element within inline element';
 }
 
 ol > *:not(li):after,
@@ -325,14 +445,14 @@ fieldset > *:not(legend):first-child:after {
 
 iframe:not([title]):after {
   background: #88FF88;
-  content: 'IFRAME lacks TITLE attribute.';
+  content: 'IFRAME lacks TITLE attribute';
 }
 
 center:after,
 u:after,
 font:after {
   background: #FFFF88;
-  content: 'Deprecated tag used.';
+  content: 'Deprecated tag used';
 }
 
 *[class^="1"]:after,
@@ -346,7 +466,7 @@ font:after {
 *[class^="9"]:after,
 *[class^="0"]:after {
   background: #FFFF88;
-  content: 'Class name cannot start with number.';
+  content: 'Class name cannot start with number';
 }
 
 *[id^="1"]:after,
@@ -360,21 +480,91 @@ font:after {
 *[id^="9"]:after,
 *[id^="0"]:after {
   background: #FFFF88;
-  content: 'ID cannot start with number.';
+  content: 'ID cannot start with number';
+}
+
+*[class*=left]:after,
+*[class*=right]:after,
+*[class*=top]:after,
+*[class*=bottom]:after,
+*[class*=center]:after,
+*[class*=clear]:after,
+*[class*=float]:after,
+*[class*=large]:after,
+*[class*=small]:after,
+*[class*=red]:after,
+*[class*=blue]:after,
+*[class*=green]:after,
+*[class*=yellow]:after,
+*[class*=white]:after,
+*[class*=black]:after,
+*[class*=Left]:after,
+*[class*=Right]:after,
+*[class*=Top]:after,
+*[class*=Bottom]:after,
+*[class*=Center]:after,
+*[class*=Clear]:after,
+*[class*=Float]:after,
+*[class*=Large]:after,
+*[class*=Small]:after,
+*[class*=Red]:after,
+*[class*=Blue]:after,
+*[class*=Green]:after,
+*[class*=Yellow]:after,
+*[class*=White]:after,
+*[class*=Black]:after {
+  background: #88FF88;
+  /* I know that these aren't necessarily bad, but probably worth highlighting */
+  content: attr(class) ' has implied style meaning - should you be naming it differently?'
+}
+
+*[id*=left]:after,
+*[id*=right]:after,
+*[id*=top]:after,
+*[id*=bottom]:after,
+*[id*=center]:after,
+*[id*=clear]:after,
+*[id*=float]:after,
+*[id*=large]:after,
+*[id*=small]:after,
+*[id*=red]:after,
+*[id*=blue]:after,
+*[id*=green]:after,
+*[id*=yellow]:after,
+*[id*=white]:after,
+*[id*=black]:after,
+*[id*=Left]:after,
+*[id*=Right]:after,
+*[id*=Top]:after,
+*[id*=Bottom]:after,
+*[id*=Center]:after,
+*[id*=Clear]:after,
+*[id*=Float]:after,
+*[id*=Large]:after,
+*[id*=Small]:after,
+*[id*=Red]:after,
+*[id*=Blue]:after,
+*[id*=Green]:after,
+*[id*=Yellow]:after,
+*[id*=White]:after,
+*[id*=Black]:after {
+  background: #88FF88;
+  /* I know that these aren't necessarily bad, but probably worth highlighting */
+  content: attr(id) ' has implied style meaning - should you be naming it differently?'
 }
 
 *[class*=\\]:after,
 *[class*=\.]:after,
 *[class*=\#]:after {
   background: #FF8888;
-  content: 'Classname has an ambiguous character.';
+  content: 'Classname has an ambiguous character';
 }
 
 *[id*=\\]:after,
 *[id*=\.]:after,
 *[id*=\#]:after {
   background: #FF8888;
-  content: 'ID has an ambiguous character.';
+  content: 'ID has an ambiguous character';
 }
 
 *[class*=\~]:after,
@@ -404,7 +594,7 @@ font:after {
 *[class*=\|]:after,
 *[class*=\`]:after {
   background: #FFFF88;
-  content: 'Class has an illegal character.';
+  content: 'Class has an illegal character';
 }
 
 *[id*=\~]:after,
@@ -434,7 +624,7 @@ font:after {
 *[id*=\|]:after,
 *[id*=\`]:after {
   background: #FFFF88;
-  content: 'ID has an illegal character.';
+  content: 'ID has an illegal character';
 }
 
 /* These may not be "wrong", but let's bug you anyway. */
@@ -473,6 +663,7 @@ marquee:after {
    element so it's easy to spot.  Use outline instead of border to avoid
    messing with the document flow.
 */
+a a,
 img:not([src]),
 img[src=""],
 img[src="#"],
@@ -486,7 +677,17 @@ img[src="#"],
 }
 
 table > tr,
-table > tbody + tfoot,
+table > colgroup ~ caption,
+table > thead ~ colgroup,
+table > tfoot ~ colgroup,
+table > tbody ~ colgroup,
+table > thead ~ caption,
+table > tfoot ~ caption,
+table > tbody ~ caption,
+table > tfoot ~ thead,
+table > tbody ~ tfoot,
+table > tbody ~ thead,
+colgroup *:not(col),
 table > *:not(thead):not(tfoot):not(tbody):not(tr):not(colgroup):not(caption),
 table[align],
 table[bgcolor],
@@ -496,6 +697,9 @@ table[cellspacing],
 *[width],
 *[height],
 *[border],
+div:empty:after,
+span:empty,
+p:empty,
 img:not([alt]),
 a:not([href]),
 a[href="#"],
@@ -613,7 +817,67 @@ fieldset > *:not(legend):first-child,
 map,
 br,
 b,
-i {
+i,
+*[class*=left],
+*[class*=right],
+*[class*=top],
+*[class*=bottom],
+*[class*=center],
+*[class*=clear],
+*[class*=float],
+*[class*=large],
+*[class*=small],
+*[class*=red],
+*[class*=blue],
+*[class*=green],
+*[class*=yellow],
+*[class*=white],
+*[class*=black],
+*[class*=Left],
+*[class*=Right],
+*[class*=Top],
+*[class*=Bottom],
+*[class*=Center],
+*[class*=Clear],
+*[class*=Float],
+*[class*=Large],
+*[class*=Small],
+*[class*=Red],
+*[class*=Blue],
+*[class*=Green],
+*[class*=Yellow],
+*[class*=White],
+*[class*=Black],
+*[id*=left],
+*[id*=right],
+*[id*=top],
+*[id*=bottom],
+*[id*=center],
+*[id*=clear],
+*[id*=float],
+*[id*=large],
+*[id*=small],
+*[id*=red],
+*[id*=blue],
+*[id*=green],
+*[id*=yellow],
+*[id*=white],
+*[id*=black],
+*[id*=Left],
+*[id*=Right],
+*[id*=Top],
+*[id*=Bottom],
+*[id*=Center],
+*[id*=Clear],
+*[id*=Float],
+*[id*=Large],
+*[id*=Small],
+*[id*=Red],
+*[id*=Blue],
+*[id*=Green],
+*[id*=Yellow],
+*[id*=White],
+*[id*=Black] {
   outline: 5px solid #88FF88;
 }
 
