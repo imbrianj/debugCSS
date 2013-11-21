@@ -635,8 +635,9 @@
               <span id="foo-left-bar">ID contains "left"</span>
             </li>
             <li>
-              <h4>*[id*=right]</h4>
+              <h4>*[id*=right]:not([id*=opyright])</h4>
               <span id="foo-right-bar">ID contains "right"</span>
+              <span id="foo-copyright-bar">ID contains "copyright" (which is good)</span>
             </li>
             <li>
               <h4>*[id*=bottom]</h4>
