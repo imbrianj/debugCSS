@@ -530,8 +530,9 @@
               <span class="foo-left-bar">Class contains "left"</span>
             </li>
             <li>
-              <h4>*[class*=right]</h4>
+              <h4>*[class*=right]:not([class*=opyright])</h4>
               <span class="foo-right-bar">Class contains "right"</span>
+              <span class="foo-copyright-bar">Class contains "copyright" (which is good)</span>
             </li>
             <li>
               <h4>*[class*=bottom]</h4>
