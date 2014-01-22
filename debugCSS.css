@@ -242,7 +242,8 @@ marquee:after,
 *[id*=\{]:after,
 *[id*=\}]:after,
 *[id*=\|]:after,
-*[id*=\`]:after {
+*[id*=\`]:after,
+body:after {
   border: 1px solid #000;
   color: #000;
   display: block;
@@ -677,6 +678,7 @@ img[src="#"],
 *[id*=\\],
 *[id*=\.],
 *[id*=\#] {
+  counter-increment: error;
   outline: 5px solid #FF8888;
 }
 
@@ -814,6 +816,7 @@ u,
 font,
 blink,
 marquee {
+  counter-increment: warning;
   outline: 5px solid #FFFF88;
 }
 
@@ -882,7 +885,22 @@ i,
 *[id*=Yellow],
 *[id*=White],
 *[id*=Black] {
+  counter-increment: notice;
   outline: 5px solid #88FF88;
+}
+
+body {
+  counter-reset: error warning notice;
+}
+
+body:after {
+  background: #FFF;
+  content: 'Errors: ' counter(error) ' | Warnings: ' counter(warning) ' | Notices: ' counter(notice);
+  font-size: 125%;
+  right: 1em;
+  outline: 5px solid #000;
+  position: fixed;
+  bottom: 1em;
 }
 
 /*********/
