@@ -69,10 +69,10 @@ dt:empty:after,
 dd:empty:after,
 a:empty:after,
 a a:after,
-img:not([alt]):after,
-img:not([src]):after,
-img[src=""]:after,
-img[src="#"]:after,
+img:not([alt]) + *:not(br):not(img):not(input):before,
+img:not([src]) + *:not(br):not(img):not(input):before,
+img[src=""] + *:not(br):not(img):not(input):before,
+img[src="#"] + *:not(br):not(img):not(input):before,
 a:not([href]):after,
 a[href="#"]:after,
 a[href*=javascript\:]:after,
@@ -106,8 +106,8 @@ center:after,
 u:after,
 font:after,
 map:after,
-br + *:not(br):before,
-br + br + *:before,
+br + *:not(br):not(img):not(input):before,
+br + br + *:not(br):not(img):not(input):before,
 b:after,
 i:after,
 blink:after,
@@ -369,14 +369,14 @@ a a:after {
   content: 'A tag within another A tag - this looks like a bug';
 }
 
-img:not([alt]):after {
+img:not([alt]) + *:not(br):not(img):not(input):before {
   background: #FFFF88;
   content: 'Image does not have an ALT attribute';
 }
 
-img:not([src]):after,
-img[src=""]:after,
-img[src="#"]:after {
+img:not([src]) + *:not(br):not(img):not(input):before,
+img[src=""] + *:not(br):not(img):not(input):before,
+img[src="#"] + *:not(br):not(img):not(input):before, {
   background: #FF8888;
   content: 'IMG without proper SRC attribute.  Serious implications for some browsers';
 }
@@ -631,12 +631,12 @@ map:after {
   content: 'Is MAP appropriate here?';
 }
 
-br + *:not(br):before {
+br + *:not(br):not(img):not(input):before {
   background: #88FF88;
   content: 'Is BR appropriate here?';
 }
 
-br + br + *:before {
+br + br + *:not(br):not(img):not(input):before {
   background: #88FF88;
   content: 'Should you be using a P tag?';
 }
