@@ -31,14 +31,15 @@
 /******************/
 
 /* All errors should try to post a message explaining the problem. */
-table:not([summary]):after,
+table[summary]:after,
+table > *:first-child:not(caption):after,
 table > tr:after,
 table th:not([scope]):after,
 table thead td:after,
 table > colgroup ~ caption:after,
-table > thead ~ colgroup:after,
-table > tfoot ~ colgroup:after,
-table > tbody ~ colgroup:after,
+table > thead ~ colgroup + *:before,
+table > tfoot ~ colgroup + *:before,
+table > tbody ~ colgroup + *:before,
 table > thead ~ caption:after,
 table > tfoot ~ caption:after,
 table > tbody ~ caption:after,
@@ -69,10 +70,10 @@ dt:empty:after,
 dd:empty:after,
 a:empty:after,
 a a:after,
-img:not([alt]) + *:not(br):not(img):not(input):before,
-img:not([src]) + *:not(br):not(img):not(input):before,
-img[src=""] + *:not(br):not(img):not(input):before,
-img[src="#"] + *:not(br):not(img):not(input):before,
+img:not([alt]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
+img:not([src]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
+img[src=""] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
+img[src="#"] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 a:not([href]):after,
 a[href="#"]:after,
 a[href*=javascript\:]:after,
@@ -101,13 +102,13 @@ ul > *:not(li):after,
 dl > *:not(dt):not(dd):after,
 form > *:not(fieldset):after,
 fieldset > *:not(legend):first-child:after,
-iframe:not([title]):after,
+iframe:not([title]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 center:after,
 u:after,
 font:after,
 map:after,
-br + *:not(br):not(img):not(input):before,
-br + br + *:not(br):not(img):not(input):before,
+br ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
+br + br ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 b:after,
 i:after,
 blink:after,
@@ -263,9 +264,14 @@ marquee:after,
    element.
 */
 
-table:not([summary]):after {
+table[summary]:after {
   background: #88FF88;
-  content: 'Should you have a SUMMARY attribute on your TABLE?';
+  content: 'SUMMARY attribute is obsolete';
+}
+
+table > *:first-child:not(caption):after {
+  background: #88FF88;
+  content: 'Should you have a CAPTION on your TABLE?';
 }
 
 table > tr:after {
@@ -288,9 +294,9 @@ table > colgroup ~ caption:after {
   content: 'CAPTION must come before COLGROUP';
 }
 
-table > thead ~ colgroup:after,
-table > tfoot ~ colgroup:after,
-table > tbody ~ colgroup:after {
+table > thead ~ colgroup + *:before,
+table > tfoot ~ colgroup + *:before,
+table > tbody ~ colgroup + *:before {
   background: #FFFF88;
   content: 'COLGROUP must come before THEAD, TFOOT and TBODY';
 }
@@ -369,14 +375,14 @@ a a:after {
   content: 'A tag within another A tag - this looks like a bug';
 }
 
-img:not([alt]) + *:not(br):not(img):not(input):before {
+img:not([alt]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
   background: #FFFF88;
   content: 'Image does not have an ALT attribute';
 }
 
-img:not([src]) + *:not(br):not(img):not(input):before,
-img[src=""] + *:not(br):not(img):not(input):before,
-img[src="#"] + *:not(br):not(img):not(input):before, {
+img:not([src]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
+img[src=""] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
+img[src="#"] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
   background: #FF8888;
   content: 'IMG without proper SRC attribute.  Serious implications for some browsers';
 }
@@ -449,8 +455,8 @@ fieldset > *:not(legend):first-child:after {
   content: 'Should your FIELDSET be using a LEGEND?';
 }
 
-iframe:not([title]):after {
-  background: #88FF88;
+iframe:not([title]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
+  background: #FFFF88;
   content: 'IFRAME lacks TITLE attribute';
 }
 
@@ -631,12 +637,12 @@ map:after {
   content: 'Is MAP appropriate here?';
 }
 
-br + *:not(br):not(img):not(input):before {
+br ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(img):not(input):first-of-type:before {
   background: #88FF88;
   content: 'Is BR appropriate here?';
 }
 
-br + br + *:not(br):not(img):not(input):before {
+br + br ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
   background: #88FF88;
   content: 'Should you be using a P tag?';
 }
@@ -811,7 +817,8 @@ marquee {
   outline: 5px solid #FFFF88;
 }
 
-table:not([summary]),
+table[summary],
+table > *:first-child:not(caption),
 table th:not([scope]),
 table thead td,
 table > tr:first-child:last-child,

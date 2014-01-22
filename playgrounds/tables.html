@@ -186,7 +186,6 @@
     <div id="bd">
       <div class="mod" id="summary">
         <div class="hd">
-
           <h3>Summary</h3>
         </div>
         <div class="bd">
@@ -221,28 +220,47 @@
         <div class="bd">
           <ul>
             <li>
-              <h4>table:not([summary])</h4>
+              <h4>table[summary]</h4>
+              <table summary="Summary attribute is deprecated">
+                <caption>Table Caption</caption>
+                <thead>
+                  <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
+                </thead>
+                <tfoot></tfoot>
+                <tbody>
+                  <tr><td>has</td><td>table</td><td>summary</td></tr>
+                  <tr><td>please</td><td>test</td><td>me.</td></tr>
+                </tbody>
+              </table>
+            </li>
+            <li>
+              <h4>table:not([caption])</h4>
               <table>
                 <thead>
                   <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
                 </thead>
                 <tfoot></tfoot>
                 <tbody>
-                  <tr><td>no</td><td>table</td><td>summary</td></tr>
+                  <tr><td>no</td><td>table</td><td>caption</td></tr>
                   <tr><td>please</td><td>test</td><td>me.</td></tr>
                 </tbody>
               </table>
             </li>
             <li>
               <h4>table > tr</h4>
-              <table summary="my table summary">
+              <p>
+                Note: this test may always pass as most browsers seem to automatically insert a tbody.
+              </p>
+              <table>
+                <caption>Table Caption</caption>
                 <tr><td>no</td><td>table</td><td>body</td></tr>
                 <tr><td>please</td><td>test</td><td>me.</td></tr>
               </table>
             </li>
             <li>
               <h4>table th:not([scope])</h4>
-              <table summary="my table summary">
+              <table>
+                <caption>Table Caption</caption>
                 <thead>
                   <tr><th>I'm</th><th>a</th><th>table</th></tr>
                 </thead>
@@ -255,7 +273,8 @@
             </li>
             <li>
               <h4>table thead td</h4>
-              <table summary="my table summary">
+              <table>
+                <caption>Table Caption</caption>
                 <thead>
                   <tr><td scope="col">I'm</td><td scope="col">a</td><td scope="col">table</td></tr>
                 </thead>
@@ -268,7 +287,7 @@
             </li>
             <li>
               <h4>table > colgroup ~ caption</h4>
-              <table summary="my table summary">
+              <table>
                 <colgroup></colgroup>
                 <caption>Caption after colgroup</caption>
                 <tbody>
@@ -279,7 +298,8 @@
             </li>
             <li>
               <h4>table > thead ~ colgroup</h4>
-              <table summary="my table summary">
+              <table>
+                <caption>Table Caption</caption>
                 <thead>
                   <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
                 </thead>
@@ -292,7 +312,8 @@
             </li>
             <li>
               <h4>table > tfoot ~ colgroup</h4>
-              <table summary="my table summary">
+              <table>
+                <caption>Table Caption</caption>
                 <thead>
                   <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
                 </thead>
@@ -306,7 +327,8 @@
             </li>
             <li>
               <h4>table > tbody ~ colgroup</h4>
-              <table summary="my table summary">
+              <table>
+                <caption>Table Caption</caption>
                 <tbody>
                   <tr><td>colgroup</td><td>after</td><td>tbody</td></tr>
                   <tr><td>please</td><td>test</td><td>me.</td></tr>
@@ -316,7 +338,7 @@
             </li>
             <li>
               <h4>table > thead ~ caption</h4>
-              <table summary="my table summary">
+              <table>
                 <thead>
                   <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
                 </thead>
@@ -329,7 +351,7 @@
             </li>
             <li>
               <h4>table > tfoot ~ caption</h4>
-              <table summary="my table summary">
+              <table>
                 <tfoot></tfoot>
                 <caption>My table caption</caption>
                 <tbody>
@@ -340,7 +362,7 @@
             </li>
             <li>
               <h4>table > tbody ~ caption</h4>
-              <table summary="my table summary">
+              <table>
                 <thead>
                   <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
                 </thead>
@@ -353,7 +375,8 @@
             </li>
             <li>
               <h4>table > tfoot ~ thead</h4>
-              <table summary="my table summary">
+              <table>
+                <caption>Table Caption</caption>
                 <tfoot></tfoot>
                 <thead>
                   <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
@@ -366,7 +389,8 @@
             </li>
             <li>
               <h4>table > tbody ~ tfoot</h4>
-              <table summary="my table summary">
+              <table>
+                <caption>Table Caption</caption>
                 <thead>
                   <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
                 </thead>
@@ -381,7 +405,8 @@
             </li>
             <li>
               <h4>table > tbody ~ thead</h4>
-              <table summary="my table summary">
+              <table>
+                <caption>Table Caption</caption>
                 <tbody>
                   <tr><td>thead</td><td>after</td><td>tbody</td></tr>
                   <tr><td>please</td><td>test</td><td>me.</td></tr>
@@ -393,7 +418,7 @@
             </li>
             <li>
               <h4>table > tbody:first-child</h4>
-              <table summary="my table summary">
+              <table>
                 <tbody>
                   <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
                   <tr><td>no</td><td>thead</td><td>tfoot</td></tr>
@@ -403,13 +428,13 @@
             </li>
             <li>
               <h4>table > tr:first-child:last-child</h4>
-              <table summary="my table summary">
+              <table>
                 <tr><td>Only one</td><td>tr</td><td>in a table</td></tr>
               </table>
             </li>
             <li>
               <h4>table > tbody > tr:first-child:last-child</h4>
-              <table summary="my table summary">
+              <table>
                 <thead>
                   <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
                 </thead>
@@ -423,7 +448,8 @@
               <p>
                 Note: this test may always pass as most browsers seem to move the non-valid tags outside the table element.
               </p>
-              <table summary="my table summary">
+              <table>
+                <caption>Table Caption</caption>
                 <h5>This header doesn't belong here</h5>
                 <thead>
                   <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
@@ -436,7 +462,8 @@
             </li>
             <li>
               <h4>colgroup *:not(col)</h4>
-              <table summary="my table summary">
+              <table>
+                <caption>Table Caption</caption>
                 <colgroup>
                   <h4>This doesn't belong here</h4>
                 </colgroup>
@@ -451,9 +478,8 @@
             </li>
             <li>
               <h4>table[align]</h4>
-              <table
-                  align="left"
-                  summary="my table summary">
+              <table align="left">
+                <caption>Table Caption</caption>
                 <thead>
                   <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
                 </thead>
@@ -466,9 +492,8 @@
             </li>
             <li>
               <h4>table[bgcolor]</h4>
-              <table
-                  bgcolor="grey"
-                  summary="my table summary">
+              <table bgcolor="grey">
+                <caption>Table Caption</caption>
                 <thead>
                   <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
                 </thead>
@@ -481,9 +506,8 @@
             </li>
             <li>
               <h4>table[border]</h4>
-              <table
-                  border="1px"
-                  summary="my table summary">
+              <table border="1px">
+                <caption>Table Caption</caption>
                 <thead>
                   <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
                 </thead>
@@ -496,9 +520,8 @@
             </li>
             <li>
               <h4>table[cellpadding]</h4>
-              <table
-                  cellpadding="5px"
-                  summary="my table summary">
+              <table cellpadding="5px">
+                <caption>Table Caption</caption>
                 <thead>
                   <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
                 </thead>
@@ -511,9 +534,8 @@
             </li>
             <li>
               <h4>table[cellspacing]</h4>
-              <table
-                  cellspacing="5px"
-                  summary="my table summary">
+              <table cellspacing="5px">
+                <caption>Table Caption</caption>
                 <thead>
                   <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
                 </thead>
@@ -526,9 +548,8 @@
             </li>
             <li>
               <h4>table[width]</h4>
-              <table
-                  width="50%"
-                  summary="my table summary">
+              <table width="50%">
+                <caption>Table Caption</caption>
                 <thead>
                   <tr><th scope="col">I'm</th><th scope="col">a</th><th scope="col">table</th></tr>
                 </thead>
