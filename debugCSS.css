@@ -59,16 +59,7 @@ table[cellspacing]:after,
 *:not(img):not(iframe)[width]:after, /* Acceptable for transitional doctypes, but should probably be relegated to CSS */
 *:not(img):not(iframe)[height]:after,
 *[border]:after,
-div:empty:after,
-span:empty:after,
-p:empty:after,
-ul:empty:after,
-ol:empty:after,
-dl:empty:after,
-li:empty:after,
-dt:empty:after,
-dd:empty:after,
-a:empty:after,
+*:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):empty:after,
 a a:after,
 img:not([alt]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 img:not([src]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
@@ -357,18 +348,9 @@ table[cellspacing]:after,
   content: 'Element has inline style';
 }
 
-div:empty:after,
-span:empty:after,
-p:empty:after,
-ul:empty:after,
-ol:empty:after,
-dl:empty:after,
-li:empty:after,
-dt:empty:after,
-dd:empty:after,
-a:empty:after {
+*:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):empty:after {
   background: #FFFF88;
-  content: 'Element has no content. Is this necessary?';
+  content: 'Element is empty. Is this necessary?';
 }
 
 a a:after {
@@ -703,16 +685,7 @@ table[cellspacing],
 *:not(img):not(iframe)[width],
 *:not(img):not(iframe)[height],
 *[border],
-div:empty:after,
-span:empty,
-p:empty,
-ul:empty,
-ol:empty,
-dl:empty,
-li:empty,
-dt:empty,
-dd:empty,
-a:empty,
+*:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):empty,
 img:not([alt]),
 a:not([href]),
 a[href="#"],
