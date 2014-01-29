@@ -59,7 +59,7 @@ table[cellspacing]:after,
 *:not(img):not(iframe)[width]:after, /* Acceptable for transitional doctypes, but should probably be relegated to CSS */
 *:not(img):not(iframe)[height]:after,
 *[border]:after,
-*:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):empty:after,
+*:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):not(textarea):empty:after,
 a a:after,
 img:not([alt]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 img:not([src]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
@@ -348,7 +348,7 @@ table[cellspacing]:after,
   content: 'Element has inline style';
 }
 
-*:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):empty:after {
+*:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):not(textarea):empty:after {
   background: #FFFF88;
   content: 'Element is empty. Is this necessary?';
 }
@@ -685,7 +685,7 @@ table[cellspacing],
 *:not(img):not(iframe)[width],
 *:not(img):not(iframe)[height],
 *[border],
-*:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):empty,
+*:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):not(textarea):empty,
 img:not([alt]),
 a:not([href]),
 a[href="#"],
