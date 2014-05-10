@@ -65,8 +65,10 @@ img:not([src]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(i
 img[src=""] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 img[src="#"] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 img[src="spacer.gif"] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
+/*
 img[src*="&"]:not([src*="&amp;"]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 a[href*="&"]:not([href*="&amp;"]):after,
+*/
 a:not([href]):after,
 a[href="#"]:after,
 a[href*=javascript\:]:after,
@@ -379,6 +381,11 @@ img[src="spacer.gif"] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr
   content: 'spacer.gif used - is this used for layout?';
 }
 
+/*
+ * Some (most?) browsers convert &amp; to & once rendered.
+ */
+
+/*
 img[src*="&"]:not([src*="&amp;"]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
   background: #F88;
   content: 'Unencoded &amp; in img src';
@@ -388,7 +395,7 @@ a[href*="&"]:not([href*="&amp;"]):after {
   background: #F88;
   content: 'Unencoded &amp; in anchor';
 }
-
+*/
 a[href="#"]:after,
 a:not([href]):after {
   background: #FF8;
@@ -683,8 +690,10 @@ a a,
 img:not([src]),
 img[src=""],
 img[src="#"],
+/*
 img[src*="&"]:not([src*="&amp;"]),
 a[href*="&"]:not([href*="&amp;"]),
+*/
 *[class*=\\],
 *[class*=\.],
 *[class*=\#],
