@@ -18,12 +18,11 @@
    broken, malformed or legacy (X)HTML.  Not all "errors" are created equally,
    so they are color coded to highlight severity.  Green is "probably not a big
    problem", yellow is "worth looking at" and red is "you really should fix
-   this."  Red severity is currently not used, but can be made available for
-   future revisions.
+   this."
 
-   Red: #FF8888;
-   Yellow: #FFFF88;
-   Green: #88FF88;
+   Red: #F88;
+   Yellow: #FF8;
+   Green: #8F8;
 */
 
 /******************/
@@ -65,6 +64,9 @@ img:not([alt]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(i
 img:not([src]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 img[src=""] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 img[src="#"] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
+img[src="spacer.gif"] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
+img[src*="&"]:not([src*="&amp;"]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
+a[href*="&"]:not([href*="&amp;"]):after,
 a:not([href]):after,
 a[href="#"]:after,
 a[href*=javascript\:]:after,
@@ -104,6 +106,8 @@ b:after,
 i:after,
 blink:after,
 marquee:after,
+script:not([type]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
+style:not([type]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 *[class^="1"]:after,
 *[class^="2"]:after,
 *[class^="3"]:after,
@@ -257,82 +261,82 @@ body:after {
 */
 
 table[summary]:after {
-  background: #88FF88;
+  background: #8F8;
   content: 'SUMMARY attribute is obsolete';
 }
 
 table > *:first-child:not(caption):after {
-  background: #88FF88;
+  background: #8F8;
   content: 'Should you have a CAPTION on your TABLE?';
 }
 
 table > tr:after {
-  background: #FFFF88;
+  background: #FF8;
   content: 'TABLE does not have a TBODY';
 }
 
 table th:not([scope]):after {
-  background: #88FF88;
+  background: #8F8;
   content: 'Should TH have a SCOPE attribute (ROW or COL)?  OK if using ID and HEADERS';
 }
 
 table thead td:after {
-  background: #88FF88;
+  background: #8F8;
   content: 'Cells in THEAD should be TH';
 }
 
 table > colgroup ~ caption:after {
-  background: #FFFF88;
+  background: #FF8;
   content: 'CAPTION must come before COLGROUP';
 }
 
 table > thead ~ colgroup + *:before,
 table > tfoot ~ colgroup + *:before,
 table > tbody ~ colgroup + *:before {
-  background: #FFFF88;
+  background: #FF8;
   content: 'COLGROUP must come before THEAD, TFOOT and TBODY';
 }
 
 table > thead ~ caption:after,
 table > tfoot ~ caption:after,
 table > tbody ~ caption:after {
-  background: #FFFF88;
+  background: #FF8;
   content: 'CAPTION must come before THEAD, TFOOT and TBODY';
 }
 
 table > tbody:first-child:after {
-  background: #88FF88;
+  background: #8F8;
   content: 'Do you need a THEAD or TFOOT?';
 }
 
 table > tfoot ~ thead:after {
-  background: #FFFF88;
+  background: #FF8;
   content: 'TFOOT should come after THEAD';
 }
 
 table > tbody ~ tfoot:after {
-  background: #FFFF88;
+  background: #FF8;
   content: 'TBODY should come after TFOOT';
 }
 
 table > tbody ~ thead:after {
-  background: #FFFF88;
+  background: #FF8;
   content: 'TBODY should come after THEAD';
 }
 
 table > tr:only-child:after,
 table > tbody > tr:only-child:after {
-  background: #88FF88;
+  background: #8F8;
   content: 'Only one TR in TABLE.  Are you using it for layout?';
 }
 
 table > *:not(thead):not(tfoot):not(tbody):not(tr):not(colgroup):not(caption):after {
-  background: #FFFF88;
+  background: #FF8;
   content: 'Only THEAD/TFOOT/TBODY/COLGROUP/CAPTION/TR can be children of a TABLE';
 }
 
 colgroup *:not(col):after {
-  background: #FFFF88;
+  background: #FF8;
   content: 'Only COLs can be children of COLGROUP';
 }
 
@@ -344,35 +348,50 @@ table[cellspacing]:after,
 *:not(img):not(iframe)[width]:after,
 *:not(img):not(iframe)[height]:after,
 *[border]:after {
-  background: #FFFF88;
+  background: #FF8;
   content: 'Element has inline style';
 }
 
 *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):not(textarea):empty:after {
-  background: #FFFF88;
+  background: #FF8;
   content: 'Element is empty. Is this necessary?';
 }
 
 a a:after {
-  background: #FF8888;
+  background: #F88;
   content: 'A tag within another A tag - this looks like a bug';
 }
 
 img:not([alt]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
-  background: #FFFF88;
+  background: #FF8;
   content: 'Image does not have an ALT attribute';
 }
 
 img:not([src]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 img[src=""] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 img[src="#"] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
-  background: #FF8888;
+  background: #F88;
   content: 'IMG without proper SRC attribute.  Serious implications for some browsers';
+}
+
+img[src="spacer.gif"] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
+  background: #FF8;
+  content: 'spacer.gif used - is this used for layout?';
+}
+
+img[src*="&"]:not([src*="&amp;"]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
+  background: #F88;
+  content: 'Unencoded &amp; in img src';
+}
+
+a[href*="&"]:not([href*="&amp;"]):after {
+  background: #F88;
+  content: 'Unencoded &amp; in anchor';
 }
 
 a[href="#"]:after,
 a:not([href]):after {
-  background: #FFFF88;
+  background: #FF8;
   content: 'Anchor tag is # or does not exist - does not degrade gracefully';
 }
 
@@ -380,22 +399,22 @@ a[href*=javascript\:]:after,
 a[onclick]:after,
 a[onmouseover]:after,
 a[onmouseout]:after {
-  background: #FFFF88;
+  background: #FF8;
   content: 'Inline JS on anchor';
 }
 
 label:not([for]):after {
-  background: #FFFF88;
+  background: #FF8;
   content: 'Should LABEL have a FOR attribute?';
 }
 
 nav:not([role]):after {
-  background: #FFFF88;
+  background: #FF8;
   content: 'NAV element should have a ROLE attribute';
 }
 
 div[role="img"]:not([aria-label]):after {
-  background: #FFFF88;
+  background: #FF8;
   content: 'DIV used as image should have ARIA-LABEL';
 }
 
@@ -413,40 +432,40 @@ html[xmlns] a h3:after,
 html[xmlns] a h4:after,
 html[xmlns] a h5:after,
 html[xmlns] a h6:after {
-  background: #FFFF88;
+  background: #FF8;
   content: 'Block level element within inline element';
 }
 
 ol > *:not(li):after,
 ul > *:not(li):after {
-  background: #FFFF88;
+  background: #FF8;
   content: 'Only LIs can be children of UL or OL';
 }
 
 dl > *:not(dt):not(dd):after {
-  background: #FFFF88;
+  background: #FF8;
   content: 'Only DT/DD can be children of a DL';
 }
 
 form > *:not(fieldset):after {
-  background: #88FF88;
+  background: #8F8;
   content: 'Should you be using a FIELDSET?';
 }
 
 fieldset > *:not(legend):first-child:after {
-  background: #88FF88;
+  background: #8F8;
   content: 'Should your FIELDSET be using a LEGEND?';
 }
 
 iframe:not([title]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
-  background: #FFFF88;
+  background: #FF8;
   content: 'IFRAME lacks TITLE attribute';
 }
 
 center:after,
 u:after,
 font:after {
-  background: #FFFF88;
+  background: #FF8;
   content: 'Deprecated tag used';
 }
 
@@ -460,7 +479,7 @@ font:after {
 *[class^="8"]:after,
 *[class^="9"]:after,
 *[class^="0"]:after {
-  background: #FFFF88;
+  background: #FF8;
   content: 'Class name cannot start with number';
 }
 
@@ -474,7 +493,7 @@ font:after {
 *[id^="8"]:after,
 *[id^="9"]:after,
 *[id^="0"]:after {
-  background: #FFFF88;
+  background: #FF8;
   content: 'ID cannot start with number';
 }
 
@@ -504,7 +523,7 @@ font:after {
 *[class*=Yellow]:after,
 *[class*=White]:after,
 *[class*=Black]:after {
-  background: #88FF88;
+  background: #8F8;
   /* I know that these aren't necessarily bad, but probably worth highlighting */
   content: attr(class) ' has implied style meaning - should you be naming it differently?';
 }
@@ -535,7 +554,7 @@ font:after {
 *[id*=Yellow]:after,
 *[id*=White]:after,
 *[id*=Black]:after {
-  background: #88FF88;
+  background: #8F8;
   /* I know that these aren't necessarily bad, but probably worth highlighting */
   content: attr(id) ' has implied style meaning - should you be naming it differently?';
 }
@@ -543,14 +562,14 @@ font:after {
 *[class*=\\]:after,
 *[class*=\.]:after,
 *[class*=\#]:after {
-  background: #FF8888;
+  background: #F88;
   content: 'Classname has an ambiguous character';
 }
 
 *[id*=\\]:after,
 *[id*=\.]:after,
 *[id*=\#]:after {
-  background: #FF8888;
+  background: #F88;
   content: 'ID has an ambiguous character';
 }
 
@@ -580,7 +599,7 @@ font:after {
 *[class*=\}]:after,
 *[class*=\|]:after,
 *[class*=\`]:after {
-  background: #FFFF88;
+  background: #FF8;
   content: 'Class has an illegal character';
 }
 
@@ -610,36 +629,46 @@ font:after {
 *[id*=\}]:after,
 *[id*=\|]:after,
 *[id*=\`]:after {
-  background: #FFFF88;
+  background: #FF8;
   content: 'ID has an illegal character';
 }
 
 /* These may not be "wrong", but let's bug you anyway. */
 map:after {
-  background: #88FF88;
+  background: #8F8;
   content: 'Is MAP appropriate here?';
 }
 
 br ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(img):not(input):first-of-type:before {
-  background: #88FF88;
+  background: #8F8;
   content: 'Is BR appropriate here?';
 }
 
 br + br ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
-  background: #88FF88;
+  background: #8F8;
   content: 'Should you be using a P tag?';
 }
 
 b:after,
 i:after {
-  background: #88FF88;
+  background: #8F8;
   content: 'Should you be using STRONG or EM?';
 }
 
 blink:after,
 marquee:after {
-  background: #FFFF88;
+  background: #FF8;
   content: 'Should you be using STRONG or EM?';
+}
+
+script:not([type]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
+  background: #8F8;
+  content: 'script tag without type defined';
+}
+
+style:not([type]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
+  background: #8F8;
+  content: 'style tag without type defined';
 }
 
 /******************/
@@ -654,6 +683,8 @@ a a,
 img:not([src]),
 img[src=""],
 img[src="#"],
+img[src*="&"]:not([src*="&amp;"]),
+a[href*="&"]:not([href*="&amp;"]),
 *[class*=\\],
 *[class*=\.],
 *[class*=\#],
@@ -661,7 +692,7 @@ img[src="#"],
 *[id*=\.],
 *[id*=\#] {
   counter-increment: error;
-  outline: 5px solid #FF8888;
+  outline: 5px solid #F88;
 }
 
 table > tr,
@@ -687,6 +718,7 @@ table[cellspacing],
 *[border],
 *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):not(textarea):empty,
 img:not([alt]),
+img[src="spacer.gif"],
 a:not([href]),
 a[href="#"],
 a[href*=javascript\:],
@@ -788,9 +820,11 @@ center,
 u,
 font,
 blink,
-marquee {
+marquee,
+script:not([type]),
+style:not([type]) {
   counter-increment: warning;
-  outline: 5px solid #FFFF88;
+  outline: 5px solid #FF8;
 }
 
 table[summary],
@@ -859,7 +893,7 @@ i,
 *[id*=White],
 *[id*=Black] {
   counter-increment: notice;
-  outline: 5px solid #88FF88;
+  outline: 5px solid #8F8;
 }
 
 body {

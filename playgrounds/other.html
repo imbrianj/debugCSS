@@ -237,6 +237,15 @@
               <img src="#" alt="Lorem Ipsum" />
             </li>
             <li>
+              <a href="/&some=link">Link with unencoded &amp;</a>
+            </li>
+            <li>
+              <img src="https://secure.gravatar.com/avatar/cf776780e895d2c099f8fb13cb7c6af2?s=140&some=img" />
+              <p>
+                Image with unencoded &amp;
+              </p>
+            </li>
+            <li>
               <h4>h1 div</h4>
               <h1><div>Div within header</div</h1>
               <p>
@@ -323,6 +332,12 @@
             <li>
               <h4>marquee</h4>
               <marquee>Deprecated tag</marquee>
+            </li>
+            <li>
+              <script></script> <span>Sript tag without type</span>
+            </li>
+            <li>
+              <style></style> <span>Style tag without type</span>
             </li>
             <li>
               <h4>*[width]</h4>
