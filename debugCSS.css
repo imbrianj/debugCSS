@@ -110,6 +110,8 @@ blink:after,
 marquee:after,
 script:not([type]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 style:not([type]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
+body script ~ *:not(script):before,
+body style ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 *[class^="1"]:after,
 *[class^="2"]:after,
 *[class^="3"]:after,
@@ -381,21 +383,6 @@ img[src="spacer.gif"] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr
   content: 'spacer.gif used - is this used for layout?';
 }
 
-/*
- * Some (most?) browsers convert &amp; to & once rendered.
- */
-
-/*
-img[src*="&"]:not([src*="&amp;"]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
-  background: #F88;
-  content: 'Unencoded &amp; in img src';
-}
-
-a[href*="&"]:not([href*="&amp;"]):after {
-  background: #F88;
-  content: 'Unencoded &amp; in anchor';
-}
-*/
 a[href="#"]:after,
 a:not([href]):after {
   background: #FF8;
@@ -678,6 +665,16 @@ style:not([type]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):no
   content: 'style tag without type defined';
 }
 
+body script ~ *:not(script):before {
+  background: #8F8;
+  content: 'script tag should be at the bottom of your body';
+}
+
+body style ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
+  background: #8F8;
+  content: 'CSS should be in your head';
+}
+
 /******************/
 /* ERROR OUTLINES */
 /******************/
@@ -829,9 +826,7 @@ center,
 u,
 font,
 blink,
-marquee,
-script:not([type]),
-style:not([type]) {
+marquee {
   counter-increment: warning;
   outline: 5px solid #FF8;
 }
@@ -900,7 +895,11 @@ i,
 *[id*=Green],
 *[id*=Yellow],
 *[id*=White],
-*[id*=Black] {
+*[id*=Black],
+script:not([type]),
+style:not([type]),
+body script ~ *:not(script),
+body style {
   counter-increment: notice;
   outline: 5px solid #8F8;
 }
