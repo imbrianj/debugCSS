@@ -237,17 +237,8 @@
               <img src="#" alt="Lorem Ipsum" />
             </li>
             <li>
-              <a href="/&some=link">Link with unencoded &amp;</a>
-            </li>
-            <li>
-              <img src="https://secure.gravatar.com/avatar/cf776780e895d2c099f8fb13cb7c6af2?s=140&some=img" />
-              <p>
-                Image with unencoded &amp;
-              </p>
-            </li>
-            <li>
               <h4>h1 div</h4>
-              <h1><div>Div within header</div</h1>
+              <h1><div>Div within header</div></h1>
               <p>
                 Note: Similarly, h2 - h6 are applicable
               </p>
@@ -359,6 +350,16 @@
               <p>
                 Note: This is allowable in transitional doctypes
               </p>
+            </li>
+            <li>
+              <h4>body script ~ *:not(script)</h4>
+              <script type="text/javascript"></script>
+              <span>Script not the last element in the body</span>
+            </li>
+            <li>
+              <h4>body style</h4>
+              <style type="text/css"></style>
+              <span>Style inside body</span>
             </li>
           </ul>
         </div>
