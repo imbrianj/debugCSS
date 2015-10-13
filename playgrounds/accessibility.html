@@ -219,6 +219,42 @@
         <div class="bd">
           <ul>
             <li>
+              <h4>input:not([id])</h4>
+              <input name="test" placeholder="No ID" />
+              <span>example</span>
+            </li>
+            <li>
+              <h4>textarea:not([id])</h4>
+              <textarea name="testing">No ID</textarea>
+              <span>example</span>
+            </li>
+            <li>
+              <h4>*[role="slider"]:not([aria-valuemin])</h4>
+              <span role="slider" aria-valuemax="3" aria-valuenow="2" aria-valuetext="Testing" />
+            </li>
+            <li>
+              <h4>*[role="slider"]:not([aria-valuemax])</h4>
+              <span role="slider" aria-valuemin="3" aria-valuenow="5" aria-valuetext="Testing" />
+            </li>
+            <li>
+              <h4>*[role="slider"]:not([aria-valuenow])</h4>
+              <span role="slider" aria-valuemin="2" aria-valuemax="3" aria-valuetext="Testing" />
+            </li>
+            <li>
+              <h4>*[role="slider"]:not([aria-valuenow])</h4>
+              <span role="slider" aria-valuemin="2" aria-valuemax="3" aria-valuenow="3" />
+            </li>
+            <li>
+              <h4>input[type="number"]:not([min])</h4>
+              <input type="number" max="4" value="3" />
+              <span>example</span>
+            </li>
+            <li>
+              <h4>input[type="number"]:not([max])</h4>
+              <input type="number" min="3" value="4" />
+              <span>example</span>
+            </li>
+            <li>
               <h4>div:empty</h4>
               <div></div>
             </li>
@@ -259,6 +295,10 @@
               <a href="accessibility.html"></a>
             </li>
             <li>
+              <h4>*[title]:empty</h4>
+              <span title="Some Element"></span>
+            </li>
+            <li>
               <h4>img:not([alt])</h4>
               <img src="https://secure.gravatar.com/avatar/cf776780e895d2c099f8fb13cb7c6af2?s=140" />
               <input value="A void tag" />
@@ -297,10 +337,6 @@
             <li>
               <h4>label:not([for])</h4>
               <label>Label without for attribute</label>
-            </li>
-            <li>
-              <h4>nav:not([role])</h4>
-              <nav>Nav without role attribute</nav>
             </li>
             <li>
               <h4>div[role="img"]:not([aria-label])</h4>

@@ -55,10 +55,19 @@ table[bgcolor]:after,
 table[border]:after,
 table[cellpadding]:after,
 table[cellspacing]:after,
+input:not([id]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
+textarea:not([id]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
+*[role="slider"]:not([aria-valuemin]):after,
+*[role="slider"]:not([aria-valuemax]):after,
+*[role="slider"]:not([aria-valuenow]):after,
+*[role="slider"]:not([aria-valuetext]):after,
+input[type="number"]:not([min]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
+input[type="number"]:not([max]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 *:not(img):not(iframe)[width]:after, /* Acceptable for transitional doctypes, but should probably be relegated to CSS */
 *:not(img):not(iframe)[height]:after,
 *[border]:after,
 *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):not(textarea):empty:after,
+*[title]:empty:after,
 a a:after,
 img:not([alt]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 img:not([src]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
@@ -76,7 +85,6 @@ a[onclick]:after,
 a[onmouseover]:after,
 a[onmouseout]:after,
 label:not([for]):after,
-nav:not([role]):after,
 div[role="img"]:not([aria-label]):after,
 h1 div:after,
 h2 div:after,
@@ -344,6 +352,26 @@ colgroup *:not(col):after {
   content: 'Only COLs can be children of COLGROUP';
 }
 
+input:not([id]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
+textarea:not([id]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
+	background: #FF8;
+	content: 'INPUT and TEXTAREA should have an ID with an associated LABEL';
+}
+
+*[role="slider"]:not([aria-valuemin]):after,
+*[role="slider"]:not([aria-valuemax]):after,
+*[role="slider"]:not([aria-valuenow]):after,
+*[role="slider"]:not([aria-valuetext]):after {
+	background: #FF8;
+	content: 'Sliders should have ARIA-VALUEMIN, ARIA-VALUMAX, ARIA-VALUENOW and ARIA-VALUETEXT';
+}
+
+input[type="number"]:not([min]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
+input[type="number"]:not([max]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
+	background: #8F8;
+	content: 'INPUT type NUMBER should have a MIN and MAX value if known.';
+}
+
 table[align]:after,
 table[bgcolor]:after,
 table[border]:after,
@@ -359,6 +387,11 @@ table[cellspacing]:after,
 *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):not(textarea):empty:after {
   background: #FF8;
   content: 'Element is empty. Is this necessary?';
+}
+
+*[title]:empty:after {
+  background: #FF8;
+  content: 'Element with title but no content. May have difficulty being read by screen readers.';
 }
 
 a a:after {
@@ -400,11 +433,6 @@ a[onmouseout]:after {
 label:not([for]):after {
   background: #FF8;
   content: 'Should LABEL have a FOR attribute?';
-}
-
-nav:not([role]):after {
-  background: #FF8;
-  content: 'NAV element should have a ROLE attribute';
 }
 
 div[role="img"]:not([aria-label]):after {
@@ -716,6 +744,14 @@ colgroup *:not(col),
 table > *:not(thead):not(tfoot):not(tbody):not(tr):not(colgroup):not(caption),
 table[align],
 table[bgcolor],
+input:not([id]),
+textarea:not([id]),
+*[role="slider"]:not([aria-valuemin]),
+*[role="slider"]:not([aria-valuemax]),
+*[role="slider"]:not([aria-valuenow]),
+*[role="slider"]:not([aria-valuetext]),
+input[type="number"]:not([min]),
+input[type="number"]:not([max]),
 table[border],
 table[cellpadding],
 table[cellspacing],
@@ -723,6 +759,7 @@ table[cellspacing],
 *:not(img):not(iframe)[height],
 *[border],
 *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):not(textarea):empty,
+*[title]:empty,
 img:not([alt]),
 img[src="spacer.gif"],
 a:not([href]),
@@ -732,7 +769,6 @@ a[onclick],
 a[onmouseover],
 a[onmouseout],
 label:not([for]),
-nav:not([role]),
 div[role="img"]:not([aria-label]),
 h1 div,
 h2 div,
@@ -838,6 +874,8 @@ table thead td,
 table > tr:first-child:last-child,
 table > tbody > tr:first-child:last-child,
 table > tbody:first-child,
+input[type="number"]:not([min]),
+input[type="number"]:not([max]),
 form > *:not(fieldset),
 fieldset > *:not(legend):first-child,
 map,
