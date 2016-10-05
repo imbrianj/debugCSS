@@ -23,4 +23,4 @@ Each condition is specified in three areas:
 
 Install
 ---
-Visit [http://yahoo.github.com/debugCSS/](http://yahoo.github.com/debugCSS/) to install the bookmarklet.
+Visit [http://imbrianj.github.com/debugCSS/](http://imbrianj.github.com/debugCSS/) to install the bookmarklet.
