@@ -354,22 +354,22 @@ colgroup *:not(col):after {
 
 input:not([id]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 textarea:not([id]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
-	background: #FF8;
-	content: 'INPUT and TEXTAREA should have an ID with an associated LABEL';
+  background: #FF8;
+  content: 'INPUT and TEXTAREA should have an ID with an associated LABEL';
 }
 
 *[role="slider"]:not([aria-valuemin]):after,
 *[role="slider"]:not([aria-valuemax]):after,
 *[role="slider"]:not([aria-valuenow]):after,
 *[role="slider"]:not([aria-valuetext]):after {
-	background: #FF8;
-	content: 'Sliders should have ARIA-VALUEMIN, ARIA-VALUMAX, ARIA-VALUENOW and ARIA-VALUETEXT';
+  background: #FF8;
+  content: 'Sliders should have ARIA-VALUEMIN, ARIA-VALUMAX, ARIA-VALUENOW and ARIA-VALUETEXT';
 }
 
 input[type="number"]:not([min]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 input[type="number"]:not([max]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
-	background: #8F8;
-	content: 'INPUT type NUMBER should have a MIN and MAX value if known.';
+  background: #8F8;
+  content: 'INPUT type NUMBER should have a MIN and MAX value if known.';
 }
 
 table[align]:after,
