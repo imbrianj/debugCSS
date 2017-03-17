@@ -224,6 +224,13 @@
               <span>example</span>
             </li>
             <li>
+              <h4>select:not([id])</h4>
+              <select name="test">
+                <option>Test 1</option>
+              </select>
+              <span>example</span>
+            </li>
+            <li>
               <h4>textarea:not([id])</h4>
               <textarea name="testing">No ID</textarea>
               <span>example</span>
@@ -301,7 +308,13 @@
             <li>
               <h4>img:not([alt])</h4>
               <img src="https://secure.gravatar.com/avatar/cf776780e895d2c099f8fb13cb7c6af2?s=140" />
-              <input value="A void tag" />
+              <input value="A void tag" id="test" name="test" />
+              <span>Some tag</span>
+            </li>
+            <li>
+              <h4>img[alt=""]</h4>
+              <img src="https://secure.gravatar.com/avatar/cf776780e895d2c099f8fb13cb7c6af2?s=140" alt="" />
+              <input value="A void tag" id="test2" name="test2" />
               <span>Some tag</span>
             </li>
             <li>
@@ -311,12 +324,20 @@
               </p>
             </li>
             <li>
+              <h4>button:empty</h4>
+              <button></button>
+            </li>
+            <li>
               <h4>a:not([href])</h4>
               <a>Link with no href</a>
             </li>
             <li>
               <h4>a[href="#"]</h4>
               <a href="#">Link with # href</a>
+            </li>
+            <li>
+              <h4>a[href=""]</h4>
+              <a href="">Link with no href value</a>
             </li>
             <li>
               <h4>a[href*=javascript\:]</h4>
@@ -359,7 +380,7 @@
             <li>
               <h4>iframe:not([title])</h4>
               <iframe src="#" width="100px" height="20px">iframe without title</iframe>
-              <input value="A void tag" />
+              <input value="A void tag" id="test3" name="test3" />
               <span>Some tag</span>
             </li>
           </ul>
