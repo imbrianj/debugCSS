@@ -50,13 +50,18 @@ table > tr:only-child:after,
 table > tbody > tr:only-child:after,
 table > *:not(thead):not(tfoot):not(tbody):not(tr):not(colgroup):not(caption):after,
 colgroup *:not(col):after,
+*[style]:after,
 table[align]:after,
 table[bgcolor]:after,
 table[border]:after,
 table[cellpadding]:after,
 table[cellspacing]:after,
 input:not([id]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
+select:not([id]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 textarea:not([id]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
+input:not([name]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
+select:not([name]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
+textarea:not([name]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 *[role="slider"]:not([aria-valuemin]):after,
 *[role="slider"]:not([aria-valuemax]):after,
 *[role="slider"]:not([aria-valuenow]):after,
@@ -70,6 +75,7 @@ input[type="number"]:not([max]) ~ *:not(area):not(base):not(br):not(col):not(emb
 *[title]:empty:after,
 a a:after,
 img:not([alt]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
+img[alt=""] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 img:not([src]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 img[src=""] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 img[src="#"] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
@@ -78,8 +84,10 @@ img[src="spacer.gif"] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr
 img[src*="&"]:not([src*="&amp;"]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 a[href*="&"]:not([href*="&amp;"]):after,
 */
+button:empty:after,
 a:not([href]):after,
 a[href="#"]:after,
+a[href=""]:after,
 a[href*=javascript\:]:after,
 a[onclick]:after,
 a[onmouseover]:after,
@@ -353,9 +361,17 @@ colgroup *:not(col):after {
 }
 
 input:not([id]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
+select:not([id]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 textarea:not([id]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
   background: #FF8;
-  content: 'INPUT and TEXTAREA should have an ID with an associated LABEL';
+  content: 'INPUT, SELECT and TEXTAREA should have an ID with an associated LABEL';
+}
+
+input:not([name]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
+select:not([name]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
+textarea:not([name]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
+  background: #FF8;
+  content: 'INPUT, SELECT and TEXTAREA should have a NAME value';
 }
 
 *[role="slider"]:not([aria-valuemin]):after,
@@ -372,6 +388,7 @@ input[type="number"]:not([max]) ~ *:not(area):not(base):not(br):not(col):not(emb
   content: 'INPUT type NUMBER should have a MIN and MAX value if known.';
 }
 
+*[style]:after,
 table[align]:after,
 table[bgcolor]:after,
 table[border]:after,
@@ -404,6 +421,11 @@ img:not([alt]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(i
   content: 'Image does not have an ALT attribute';
 }
 
+img[alt=""] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
+  background: #8F8;
+  content: 'Image has an empty ALT attribute. This image will not be read to screen readers.';
+}
+
 img:not([src]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 img[src=""] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
 img[src="#"] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
@@ -417,6 +439,7 @@ img[src="spacer.gif"] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr
 }
 
 a[href="#"]:after,
+a[href=""]:after,
 a:not([href]):after {
   background: #FF8;
   content: 'Anchor tag is # or does not exist - does not degrade gracefully';
@@ -742,10 +765,15 @@ table > tbody ~ tfoot,
 table > tbody ~ thead,
 colgroup *:not(col),
 table > *:not(thead):not(tfoot):not(tbody):not(tr):not(colgroup):not(caption),
+*[style],
 table[align],
 table[bgcolor],
 input:not([id]),
+select:not([id]),
 textarea:not([id]),
+input:not([name]),
+select:not([name]),
+textarea:not([name]),
 *[role="slider"]:not([aria-valuemin]),
 *[role="slider"]:not([aria-valuemax]),
 *[role="slider"]:not([aria-valuenow]),
@@ -762,8 +790,10 @@ table[cellspacing],
 *[title]:empty,
 img:not([alt]),
 img[src="spacer.gif"],
+button:empty,
 a:not([href]),
 a[href="#"],
+a[href=""],
 a[href*=javascript\:],
 a[onclick],
 a[onmouseover],
@@ -867,6 +897,7 @@ marquee {
   outline: 5px solid #FF8;
 }
 
+img[alt=""],
 table[summary],
 table > *:first-child:not(caption),
 table th:not([scope]),
