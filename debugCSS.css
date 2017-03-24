@@ -1010,3 +1010,7 @@ body > img:only-child {
   margin: 1em auto;
   padding: 0;
 }
+
+*[style="[object Object]"] {
+  outline: 5px solid #8F8;
+}
