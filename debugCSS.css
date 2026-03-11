@@ -2,1011 +2,1510 @@
 /* LICENSE */
 /***********/
 
-/* Copyrights for code authored by Yahoo! Inc. is licensed under the following terms:
+/* Copyrights for code authored by Yahoo! Inc. is licensed under the following
+   terms:
    MIT License
    Copyright (c) 2011 Yahoo! Inc. All Rights Reserved.
-   Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+   Permission is hereby granted, free of charge, to any person obtaining a copy
+   of this software and associated documentation files (the "Software"), to
+   deal in the Software without restriction, including without limitation the
+   rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+   sell copies of the Software, and to permit persons to whom the Software is
+   furnished to do so, subject to the following conditions:
+   The above copyright notice and this permission notice shall be included in
+   all copies or substantial portions of the Software.
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+   FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+   IN THE SOFTWARE.
 */
 
 /*****************/
 /* WHAT IS THIS? */
 /*****************/
 
-/* debugCSS is meant to be loaded on an existing page to highlight potentially
-   broken, malformed or legacy (X)HTML.  Not all "errors" are created equally,
-   so they are color coded to highlight severity.  Green is "probably not a big
-   problem", yellow is "worth looking at" and red is "you really should fix
-   this."
+/* debugCSS is meant to be loaded on an existing page to highlight malformed,
+   inaccessible or legacy HTML that is still worth fixing in modern codebases.
+   The goal is signal over nostalgia: prefer checks that are actionable on
+   current browser engines and app stacks.
 
-   Red: #F88;
-   Yellow: #FF8;
-   Green: #8F8;
+   Error:   #ff6b6b
+   Warning: #ffd166
+   Notice:  #8fd694
 */
 
-/******************/
+/************/
+/* SETTINGS */
+/************/
+
+:root {
+  --debugcss-error: #ff6b6b;
+  --debugcss-warning: #ffd166;
+  --debugcss-notice: #8fd694;
+  --debugcss-text: #111111;
+  --debugcss-panel: rgba(17, 24, 39, 0.94);
+  --debugcss-panel-text: #f9fafb;
+  --debugcss-outline-width: 3px;
+  --debugcss-font: 600 12px/1.35 ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --debugcss-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  --debugcss-z: 2147483646;
+  --debugcss-chip-opacity: 1;
+  --debugcss-chip-transition: opacity 140ms ease, transform 140ms ease;
+  --debugcss-alpha-bg: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAgMAAAAOFJJnAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAlQTFRF/+Pj2tra2dnZ4Z9gVgAAAHxJREFUGBkFwUGKxDAQBDB9shqcuw2T/3TAc5+A95UruZv+IoNqvEWCavLFDB2M5vPgGpyFNOcB80cPJMxgHhLkQ4IxuBorpDA3Y+MazEfC2+gwgnOxHnSogb15F1JcGxmkcBb1AwlVqCIHadZGwt+NGmQhD1lIuB+scOUfnCk3BP0u5SsAAAAASUVORK5CYII=);
+}
+
+html[data-debugcss-compact] {
+  --debugcss-chip-opacity: 0;
+}
+
+html[data-debugcss-compact]:is(:not([lang]), [lang=""]) {
+  --debugcss-chip-opacity: 1;
+}
+
+html {
+  counter-reset: debugcss-error debugcss-warning debugcss-notice debugcss-a11y
+    debugcss-structure debugcss-legacy debugcss-security;
+}
+
+/*****************/
+/* SHARED CHROME */
+/*****************/
+
+:where(
+  html:not([lang]),
+  html[lang=""],
+  img:not([alt]),
+  img:is(:not([src]), [src=""], [src="#"]),
+  input[type="image"]:is(:not([alt]), [alt=""]),
+  area[href]:is(:not([alt]), [alt=""]),
+  a a,
+  button:empty:not([aria-label]):not([aria-labelledby]),
+  a[href]:empty:not([aria-label]):not([aria-labelledby]),
+  :is(
+      a[href],
+      button,
+      input:not([type="hidden"]),
+      select,
+      textarea,
+      summary,
+      iframe,
+      [tabindex]:not([tabindex="-1"]),
+      audio[controls],
+      video[controls],
+      [contenteditable="true"],
+      [contenteditable="plaintext-only"]
+    )[aria-hidden="true"],
+  [aria-hidden="true"] :is(
+      a[href],
+      button,
+      input:not([type="hidden"]),
+      select,
+      textarea,
+      summary,
+      iframe,
+      [tabindex]:not([tabindex="-1"]),
+      audio[controls],
+      video[controls],
+      [contenteditable="true"],
+      [contenteditable="plaintext-only"]
+    ),
+  [aria-label=""],
+  [aria-labelledby=""],
+  [aria-describedby=""],
+  iframe:not([title]):not([aria-label]):not([aria-labelledby]),
+  iframe[title=""],
+  a[href^="javascript:" i],
+  a[target="_blank"]:not([rel~="noopener" i]):not([rel~="noreferrer" i]),
+  a:not([href]),
+  a[href=""],
+  a[href="#"],
+  main ~ main,
+  :is(h1, h2, h3, h4, h5, h6):empty,
+  :is(ul, ol) > :not(li),
+  dl > :not(dt):not(dd),
+  center,
+  font,
+  marquee,
+  blink,
+  table[summary],
+  table thead td,
+  table th:not([scope]):not([headers]):not([id]),
+  img[alt=""],
+  img[role="presentation"][alt]:not([alt=""]),
+  :is(table, td, th, img)[align],
+  :is(table, td, th)[bgcolor],
+  :is(table, td, th)[valign],
+  table[border],
+  table[cellpadding],
+  table[cellspacing],
+  [id=""],
+  [for=""],
+  [role="slider"]:not([aria-valuemin]),
+  [role="slider"]:not([aria-valuemax]),
+  [role="slider"]:not([aria-valuenow]),
+  [role="button"]:not(button):not(input):not(a[href]):not([tabindex]),
+  [role="checkbox"]:not([aria-checked]),
+  [role="radio"]:not([aria-checked]),
+  [role="switch"]:not([aria-checked]),
+  [role="tab"]:not([aria-selected]),
+  [role="combobox"]:not([aria-expanded]),
+  [role="dialog"]:not([aria-label]):not([aria-labelledby]),
+  [role="progressbar"]:not([aria-valuenow]),
+  [tabindex]:not([tabindex="-1"]):not([tabindex="0"]),
+  [accesskey],
+  input[type="radio"]:not([name]),
+  form button:not([type]),
+  input[pattern]:not([title]):not([aria-describedby]):not([aria-description]),
+  summary:empty,
+  caption:empty,
+  video[autoplay]:not([muted]),
+  audio[autoplay]
+) {
+  outline: var(--debugcss-outline-width) solid var(--debugcss-tone) !important;
+  outline-offset: 2px !important;
+  position: relative;
+}
+
+:where(
+  html:not([lang]),
+  html[lang=""],
+  img:not([alt]),
+  img:is(:not([src]), [src=""], [src="#"]),
+  input[type="image"]:is(:not([alt]), [alt=""]),
+  area[href]:is(:not([alt]), [alt=""]),
+  a a,
+  button:empty:not([aria-label]):not([aria-labelledby]),
+  a[href]:empty:not([aria-label]):not([aria-labelledby]),
+  :is(
+      a[href],
+      button,
+      input:not([type="hidden"]),
+      select,
+      textarea,
+      summary,
+      iframe,
+      [tabindex]:not([tabindex="-1"]),
+      audio[controls],
+      video[controls],
+      [contenteditable="true"],
+      [contenteditable="plaintext-only"]
+    )[aria-hidden="true"],
+  [aria-hidden="true"] :is(
+      a[href],
+      button,
+      input:not([type="hidden"]),
+      select,
+      textarea,
+      summary,
+      iframe,
+      [tabindex]:not([tabindex="-1"]),
+      audio[controls],
+      video[controls],
+      [contenteditable="true"],
+      [contenteditable="plaintext-only"]
+    ),
+  [aria-label=""],
+  [aria-labelledby=""],
+  [aria-describedby=""],
+  iframe:not([title]):not([aria-label]):not([aria-labelledby]),
+  iframe[title=""],
+  a[href^="javascript:" i],
+  a[target="_blank"]:not([rel~="noopener" i]):not([rel~="noreferrer" i]),
+  a:not([href]),
+  a[href=""],
+  a[href="#"],
+  main ~ main,
+  :is(h1, h2, h3, h4, h5, h6):empty,
+  :is(ul, ol) > :not(li),
+  dl > :not(dt):not(dd),
+  center,
+  font,
+  marquee,
+  blink,
+  table[summary],
+  table thead td,
+  table th:not([scope]):not([headers]):not([id]),
+  img[alt=""],
+  img[role="presentation"][alt]:not([alt=""]),
+  :is(table, td, th, img)[align],
+  :is(table, td, th)[bgcolor],
+  :is(table, td, th)[valign],
+  table[border],
+  table[cellpadding],
+  table[cellspacing],
+  [id=""],
+  [for=""],
+  [role="slider"]:not([aria-valuemin]),
+  [role="slider"]:not([aria-valuemax]),
+  [role="slider"]:not([aria-valuenow]),
+  [role="button"]:not(button):not(input):not(a[href]):not([tabindex]),
+  [role="checkbox"]:not([aria-checked]),
+  [role="radio"]:not([aria-checked]),
+  [role="switch"]:not([aria-checked]),
+  [role="tab"]:not([aria-selected]),
+  [role="combobox"]:not([aria-expanded]),
+  [role="dialog"]:not([aria-label]):not([aria-labelledby]),
+  [role="progressbar"]:not([aria-valuenow]),
+  [tabindex]:not([tabindex="-1"]):not([tabindex="0"]),
+  [accesskey],
+  input[type="radio"]:not([name]),
+  form button:not([type]),
+  input[pattern]:not([title]):not([aria-describedby]):not([aria-description]),
+  summary:empty,
+  caption:empty,
+  video[autoplay]:not([muted]),
+  audio[autoplay]
+)::after {
+  all: initial !important;
+  background: var(--debugcss-tone) !important;
+  border: 1px solid rgba(17, 24, 39, 0.8) !important;
+  border-radius: 4px !important;
+  box-shadow: var(--debugcss-shadow) !important;
+  box-sizing: border-box !important;
+  color: var(--debugcss-text) !important;
+  content: var(--debugcss-message) !important;
+  display: block !important;
+  font: var(--debugcss-font) !important;
+  left: 0 !important;
+  max-width: min(28rem, calc(100vw - 1rem)) !important;
+  opacity: var(--debugcss-chip-opacity) !important;
+  padding: 0.22rem 0.45rem !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  text-transform: none !important;
+  top: 0 !important;
+  transform: translate(0.25rem, 0.25rem) !important;
+  transition: var(--debugcss-chip-transition) !important;
+  white-space: normal !important;
+  z-index: var(--debugcss-z) !important;
+}
+
+html[data-debugcss-compact] :where(
+    img:not([alt]),
+    img:is(:not([src]), [src=""], [src="#"]),
+    input[type="image"]:is(:not([alt]), [alt=""]),
+    area[href]:is(:not([alt]), [alt=""]),
+    a a,
+    button:empty:not([aria-label]):not([aria-labelledby]),
+    a[href]:empty:not([aria-label]):not([aria-labelledby]),
+    :is(
+        a[href],
+        button,
+        input:not([type="hidden"]),
+        select,
+        textarea,
+        summary,
+        iframe,
+        [tabindex]:not([tabindex="-1"]),
+        audio[controls],
+        video[controls],
+        [contenteditable="true"],
+        [contenteditable="plaintext-only"]
+      )[aria-hidden="true"],
+    [aria-hidden="true"] :is(
+        a[href],
+        button,
+        input:not([type="hidden"]),
+        select,
+        textarea,
+        summary,
+        iframe,
+        [tabindex]:not([tabindex="-1"]),
+        audio[controls],
+        video[controls],
+        [contenteditable="true"],
+        [contenteditable="plaintext-only"]
+      ),
+    [aria-label=""],
+    [aria-labelledby=""],
+    [aria-describedby=""],
+    iframe:not([title]):not([aria-label]):not([aria-labelledby]),
+    iframe[title=""],
+    a[href^="javascript:" i],
+    a[target="_blank"]:not([rel~="noopener" i]):not([rel~="noreferrer" i]),
+    a:not([href]),
+    a[href=""],
+    a[href="#"],
+    main ~ main,
+    :is(h1, h2, h3, h4, h5, h6):empty,
+    :is(ul, ol) > :not(li),
+    dl > :not(dt):not(dd),
+    center,
+    font,
+    marquee,
+    blink,
+    table[summary],
+    table thead td,
+    table th:not([scope]):not([headers]):not([id]),
+    img[alt=""],
+    img[role="presentation"][alt]:not([alt=""]),
+    :is(table, td, th, img)[align],
+    :is(table, td, th)[bgcolor],
+    :is(table, td, th)[valign],
+    table[border],
+    table[cellpadding],
+    table[cellspacing],
+    [id=""],
+    [for=""],
+    [role="slider"]:not([aria-valuemin]),
+    [role="slider"]:not([aria-valuemax]),
+    [role="slider"]:not([aria-valuenow]),
+    [role="button"]:not(button):not(input):not(a[href]):not([tabindex]),
+    [role="checkbox"]:not([aria-checked]),
+    [role="radio"]:not([aria-checked]),
+    [role="switch"]:not([aria-checked]),
+    [role="tab"]:not([aria-selected]),
+    [role="combobox"]:not([aria-expanded]),
+    [role="dialog"]:not([aria-label]):not([aria-labelledby]),
+    [role="progressbar"]:not([aria-valuenow]),
+    [tabindex]:not([tabindex="-1"]):not([tabindex="0"]),
+    [accesskey],
+    input[type="radio"]:not([name]),
+    form button:not([type]),
+    input[pattern]:not([title]):not([aria-describedby]):not([aria-description]),
+    summary:empty,
+    caption:empty,
+    video[autoplay]:not([muted]),
+    audio[autoplay]
+  ):is(:hover, :focus, :focus-within) {
+  --debugcss-chip-opacity: 1;
+}
+
+/********************/
+/* SEVERITY BUCKETS */
+/********************/
+
+:where(
+  table[summary],
+  table th:not([scope]):not([headers]):not([id]),
+  img[alt=""],
+  img[role="presentation"][alt]:not([alt=""]),
+  :is(table, td, th, img)[align],
+  :is(table, td, th)[bgcolor],
+  :is(table, td, th)[valign],
+  table[border],
+  table[cellpadding],
+  table[cellspacing],
+  [id=""],
+  [for=""],
+  [accesskey],
+  form button:not([type]),
+  input[pattern]:not([title]):not([aria-describedby]):not([aria-description])
+) {
+  --debugcss-tone: var(--debugcss-notice) !important;
+  counter-increment: debugcss-notice debugcss-a11y !important;
+}
+
+:where(
+  [id=""],
+  [for=""],
+  form button:not([type])
+) {
+  --debugcss-tone: var(--debugcss-notice) !important;
+  counter-increment: debugcss-notice debugcss-structure !important;
+}
+
+:where(
+  table[summary],
+  :is(table, td, th, img)[align],
+  :is(table, td, th)[bgcolor],
+  :is(table, td, th)[valign],
+  table[border],
+  table[cellpadding],
+  table[cellspacing]
+) {
+  --debugcss-tone: var(--debugcss-notice) !important;
+  counter-increment: debugcss-notice debugcss-legacy !important;
+}
+
+:where(
+  [aria-label=""],
+  [aria-labelledby=""],
+  [aria-describedby=""],
+  iframe:not([title]):not([aria-label]):not([aria-labelledby]),
+  iframe[title=""],
+  [role="button"]:not(button):not(input):not(a[href]):not([tabindex]),
+  [tabindex]:not([tabindex="-1"]):not([tabindex="0"]),
+  summary:empty,
+  caption:empty,
+  video[autoplay]:not([muted]),
+  audio[autoplay]
+) {
+  --debugcss-tone: var(--debugcss-warning) !important;
+  counter-increment: debugcss-warning debugcss-a11y !important;
+}
+
+:where(
+  a:not([href]),
+  a[href=""],
+  a[href="#"],
+  main ~ main,
+  :is(h1, h2, h3, h4, h5, h6):empty,
+  :is(ul, ol) > :not(li),
+  dl > :not(dt):not(dd),
+  table thead td
+) {
+  --debugcss-tone: var(--debugcss-warning) !important;
+  counter-increment: debugcss-warning debugcss-structure !important;
+}
+
+:where(
+  a[href^="javascript:" i],
+  a[target="_blank"]:not([rel~="noopener" i]):not([rel~="noreferrer" i])
+) {
+  --debugcss-tone: var(--debugcss-warning) !important;
+  counter-increment: debugcss-warning debugcss-security !important;
+}
+
+:where(
+  center,
+  font,
+  marquee,
+  blink
+) {
+  --debugcss-tone: var(--debugcss-warning) !important;
+  counter-increment: debugcss-warning debugcss-legacy !important;
+}
+
+:where(
+  html:not([lang]),
+  html[lang=""],
+  img:not([alt]),
+  input[type="image"]:is(:not([alt]), [alt=""]),
+  area[href]:is(:not([alt]), [alt=""]),
+  button:empty:not([aria-label]):not([aria-labelledby]),
+  a[href]:empty:not([aria-label]):not([aria-labelledby]),
+  :is(
+      a[href],
+      button,
+      input:not([type="hidden"]),
+      select,
+      textarea,
+      summary,
+      iframe,
+      [tabindex]:not([tabindex="-1"]),
+      audio[controls],
+      video[controls],
+      [contenteditable="true"],
+      [contenteditable="plaintext-only"]
+    )[aria-hidden="true"],
+  [aria-hidden="true"] :is(
+      a[href],
+      button,
+      input:not([type="hidden"]),
+      select,
+      textarea,
+      summary,
+      iframe,
+      [tabindex]:not([tabindex="-1"]),
+      audio[controls],
+      video[controls],
+      [contenteditable="true"],
+      [contenteditable="plaintext-only"]
+    ),
+  [role="slider"]:not([aria-valuemin]),
+  [role="slider"]:not([aria-valuemax]),
+  [role="slider"]:not([aria-valuenow]),
+  [role="checkbox"]:not([aria-checked]),
+  [role="radio"]:not([aria-checked]),
+  [role="switch"]:not([aria-checked]),
+  [role="tab"]:not([aria-selected]),
+  [role="combobox"]:not([aria-expanded]),
+  [role="dialog"]:not([aria-label]):not([aria-labelledby]),
+  [role="progressbar"]:not([aria-valuenow]),
+  input[type="radio"]:not([name])
+) {
+  --debugcss-tone: var(--debugcss-error) !important;
+  counter-increment: debugcss-error debugcss-a11y !important;
+}
+
+:where(
+  img:is(:not([src]), [src=""], [src="#"]),
+  a a
+) {
+  --debugcss-tone: var(--debugcss-error) !important;
+  counter-increment: debugcss-error debugcss-structure !important;
+}
+
+/*******************/
 /* ERROR MESSAGES */
-/******************/
+/*******************/
 
-/* All errors should try to post a message explaining the problem. */
-table[summary]:after,
-table > *:first-child:not(caption):after,
-table > tr:after,
-table th:not([scope]):after,
-table thead td:after,
-table > colgroup ~ caption:after,
-table > thead ~ colgroup + *:before,
-table > tfoot ~ colgroup + *:before,
-table > tbody ~ colgroup + *:before,
-table > thead ~ caption:after,
-table > tfoot ~ caption:after,
-table > tbody ~ caption:after,
-table > tbody:first-child:after,
-table > tfoot ~ thead:after,
-table > tbody ~ tfoot:after,
-table > tbody ~ thead:after,
-table > tr:only-child:after,
-table > tbody > tr:only-child:after,
-table > *:not(thead):not(tfoot):not(tbody):not(tr):not(colgroup):not(caption):after,
-colgroup *:not(col):after,
-*[style]:after,
-table[align]:after,
-table[bgcolor]:after,
-table[border]:after,
-table[cellpadding]:after,
-table[cellspacing]:after,
-input:not([id]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-select:not([id]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-textarea:not([id]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-input:not([name]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-select:not([name]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-textarea:not([name]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-*[role="slider"]:not([aria-valuemin]):after,
-*[role="slider"]:not([aria-valuemax]):after,
-*[role="slider"]:not([aria-valuenow]):after,
-*[role="slider"]:not([aria-valuetext]):after,
-input[type="number"]:not([min]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-input[type="number"]:not([max]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-*:not(img):not(iframe)[width]:after, /* Acceptable for transitional doctypes, but should probably be relegated to CSS */
-*:not(img):not(iframe)[height]:after,
-*[border]:after,
-*:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):not(textarea):empty:after,
-*[title]:empty:after,
-a a:after,
-img:not([alt]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-img[alt=""] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-img:not([src]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-img[src=""] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-img[src="#"] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-img[src="spacer.gif"] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-/*
-img[src*="&"]:not([src*="&amp;"]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-a[href*="&"]:not([href*="&amp;"]):after,
-*/
-button:empty:after,
-a:not([href]):after,
-a[href="#"]:after,
-a[href=""]:after,
-a[href*=javascript\:]:after,
-a[onclick]:after,
-a[onmouseover]:after,
-a[onmouseout]:after,
-label:not([for]):after,
-div[role="img"]:not([aria-label]):after,
-h1 div:after,
-h2 div:after,
-h3 div:after,
-h4 div:after,
-h5 div:after,
-h6 div:after,
-span div:after,
-html[xmlns] a div:after, /* Try to select only in XHTML documents (thanks, Thierry). */
-html[xmlns] a h1:after,
-html[xmlns] a h2:after,
-html[xmlns] a h3:after,
-html[xmlns] a h4:after,
-html[xmlns] a h5:after,
-html[xmlns] a h6:after,
-ol > *:not(li):after,
-ul > *:not(li):after,
-dl > *:not(dt):not(dd):after,
-form > *:not(fieldset):after,
-fieldset > *:not(legend):first-child:after,
-iframe:not([title]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-center:after,
-u:after,
-font:after,
-map:after,
-br ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-br + br ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-b:after,
-i:after,
-blink:after,
-marquee:after,
-script:not([type]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-style:not([type]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-body script ~ *:not(script):before,
-body style ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-*[style="[object Object]"]:after,
-*[class^="1"]:after,
-*[class^="2"]:after,
-*[class^="3"]:after,
-*[class^="4"]:after,
-*[class^="5"]:after,
-*[class^="6"]:after,
-*[class^="7"]:after,
-*[class^="8"]:after,
-*[class^="9"]:after,
-*[class^="0"]:after,
-*[id^="1"]:after,
-*[id^="2"]:after,
-*[id^="3"]:after,
-*[id^="4"]:after,
-*[id^="5"]:after,
-*[id^="6"]:after,
-*[id^="7"]:after,
-*[id^="8"]:after,
-*[id^="9"]:after,
-*[id^="0"]:after,
-*[class*=left]:after,
-*[class*=right]:not([class*=opyright]):after,
-*[class*=bottom]:after,
-*[class*=center]:after,
-*[class*=clear]:after,
-*[class*=float]:after,
-*[class*=large]:after,
-*[class*=small]:after,
-*[class*=blue]:after,
-*[class*=green]:after,
-*[class*=yellow]:after,
-*[class*=white]:after,
-*[class*=black]:after,
-*[class*=Left]:after,
-*[class*=Right]:after,
-*[class*=Bottom]:after,
-*[class*=Center]:after,
-*[class*=Clear]:after,
-*[class*=Float]:after,
-*[class*=Large]:after,
-*[class*=Small]:after,
-*[class*=Blue]:after,
-*[class*=Green]:after,
-*[class*=Yellow]:after,
-*[class*=White]:after,
-*[class*=Black]:after,
-*[id*=left]:after,
-*[id*=right]:not([id*=opyright]):after,
-*[id*=bottom]:after,
-*[id*=center]:after,
-*[id*=clear]:after,
-*[id*=float]:after,
-*[id*=large]:after,
-*[id*=small]:after,
-*[id*=blue]:after,
-*[id*=green]:after,
-*[id*=yellow]:after,
-*[id*=white]:after,
-*[id*=black]:after,
-*[id*=Left]:after,
-*[id*=Right]:after,
-*[id*=Bottom]:after,
-*[id*=Center]:after,
-*[id*=Clear]:after,
-*[id*=Float]:after,
-*[id*=Large]:after,
-*[id*=Small]:after,
-*[id*=Blue]:after,
-*[id*=Green]:after,
-*[id*=Yellow]:after,
-*[id*=White]:after,
-*[id*=Black]:after,
-*[class*=\\]:after,
-*[class*=\.]:after,
-*[class*=\#]:after,
-*[class*=\~]:after,
-*[class*=\!]:after,
-*[class*=\@]:after,
-*[class*=\$]:after,
-*[class*=\%]:after,
-*[class*=\^]:after,
-*[class*=\&]:after,
-*[class*=\*]:after,
-*[class*=\(]:after,
-*[class*=\)]:after,
-*[class*=\=]:after,
-*[class*=\,]:after,
-*[class*=\/]:after,
-*[class*=\']:after,
-*[class*=\;]:after,
-*[class*=\:]:after,
-*[class*=\"]:after,
-*[class*=\?]:after,
-*[class*=\>]:after,
-*[class*=\<]:after,
-*[class*=\[]:after,
-*[class*=\]]:after,
-*[class*=\{]:after,
-*[class*=\}]:after,
-*[class*=\|]:after,
-*[class*=\`]:after,
-*[id*=\\]:after,
-*[id*=\.]:after,
-*[id*=\#]:after,
-*[id*=\~]:after,
-*[id*=\!]:after,
-*[id*=\@]:after,
-*[id*=\$]:after,
-*[id*=\%]:after,
-*[id*=\^]:after,
-*[id*=\&]:after,
-*[id*=\*]:after,
-*[id*=\(]:after,
-*[id*=\)]:after,
-*[id*=\=]:after,
-*[id*=\,]:after,
-*[id*=\/]:after,
-*[id*=\']:after,
-*[id*=\;]:after,
-*[id*=\:]:after,
-*[id*=\"]:after,
-*[id*=\?]:after,
-*[id*=\>]:after,
-*[id*=\<]:after,
-*[id*=\[]:after,
-*[id*=\]]:after,
-*[id*=\{]:after,
-*[id*=\}]:after,
-*[id*=\|]:after,
-*[id*=\`]:after,
-body:after {
-  border: 1px solid #000;
-  color: #000;
-  display: block;
-  font-family: helvetica;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: bold;
-  line-height: 1.3em;
-  padding: .1em .3em;
-  position: absolute;
-  text-decoration: none;
-  text-transform: none;
-  z-index: 99999;
+html:not([lang]),
+html[lang=""] {
+  --debugcss-message: "Add a non-empty lang attribute to <html>." !important;
 }
 
-/* Each error message will have a color for severity (green, yellow, red) and a
-   message.  Even if the content isn't able to be displayed (such as with
-   images), they're used so you can quickly see the message when inspecting the
-   element.
-*/
-
-table[summary]:after {
-  background: #8F8;
-  content: 'SUMMARY attribute is obsolete';
+img:not([alt]) {
+  --debugcss-message: "Image is missing alt text." !important;
 }
 
-table > *:first-child:not(caption):after {
-  background: #8F8;
-  content: 'Should you have a CAPTION on your TABLE?';
+img:is(:not([src]), [src=""], [src="#"]) {
+  --debugcss-message: "Image has a missing or placeholder src." !important;
 }
 
-table > tr:after {
-  background: #FF8;
-  content: 'TABLE does not have a TBODY';
+input[type="image"]:is(:not([alt]), [alt=""]) {
+  --debugcss-message: "Image button needs meaningful alt text." !important;
 }
 
-table th:not([scope]):after {
-  background: #8F8;
-  content: 'Should TH have a SCOPE attribute (ROW or COL)?  OK if using ID and HEADERS';
+area[href]:is(:not([alt]), [alt=""]) {
+  --debugcss-message: "Image map area needs alt text." !important;
 }
 
-table thead td:after {
-  background: #8F8;
-  content: 'Cells in THEAD should be TH';
+a a {
+  --debugcss-message: "Nested links are invalid markup." !important;
 }
 
-table > colgroup ~ caption:after {
-  background: #FF8;
-  content: 'CAPTION must come before COLGROUP';
+button:empty:not([aria-label]):not([aria-labelledby]) {
+  --debugcss-message: "Empty button has no accessible name." !important;
 }
 
-table > thead ~ colgroup + *:before,
-table > tfoot ~ colgroup + *:before,
-table > tbody ~ colgroup + *:before {
-  background: #FF8;
-  content: 'COLGROUP must come before THEAD, TFOOT and TBODY';
+a[href]:empty:not([aria-label]):not([aria-labelledby]) {
+  --debugcss-message: "Empty link has no accessible name." !important;
 }
 
-table > thead ~ caption:after,
-table > tfoot ~ caption:after,
-table > tbody ~ caption:after {
-  background: #FF8;
-  content: 'CAPTION must come before THEAD, TFOOT and TBODY';
+:is(
+    a[href],
+    button,
+    input:not([type="hidden"]),
+    select,
+    textarea,
+    summary,
+    iframe,
+    [tabindex]:not([tabindex="-1"]),
+    audio[controls],
+    video[controls],
+    [contenteditable="true"],
+    [contenteditable="plaintext-only"]
+  )[aria-hidden="true"] {
+  --debugcss-message: "Focusable element is hidden from assistive tech with aria-hidden." !important;
 }
 
-table > tbody:first-child:after {
-  background: #8F8;
-  content: 'Do you need a THEAD or TFOOT?';
+[aria-hidden="true"] :is(
+    a[href],
+    button,
+    input:not([type="hidden"]),
+    select,
+    textarea,
+    summary,
+    iframe,
+    [tabindex]:not([tabindex="-1"]),
+    audio[controls],
+    video[controls],
+    [contenteditable="true"],
+    [contenteditable="plaintext-only"]
+  ) {
+  --debugcss-message: "Focusable content sits inside an aria-hidden subtree." !important;
 }
 
-table > tfoot ~ thead:after {
-  background: #FF8;
-  content: 'TFOOT should come after THEAD';
+[role="slider"]:not([aria-valuemin]),
+[role="slider"]:not([aria-valuemax]),
+[role="slider"]:not([aria-valuenow]) {
+  --debugcss-message: "Slider role is missing a required aria-value attribute." !important;
 }
 
-table > tbody ~ tfoot:after {
-  background: #FF8;
-  content: 'TBODY should come after TFOOT';
+[role="checkbox"]:not([aria-checked]),
+[role="radio"]:not([aria-checked]),
+[role="switch"]:not([aria-checked]) {
+  --debugcss-message: "Custom checkable control is missing aria-checked." !important;
 }
 
-table > tbody ~ thead:after {
-  background: #FF8;
-  content: 'TBODY should come after THEAD';
+[role="tab"]:not([aria-selected]) {
+  --debugcss-message: "Tab role is missing aria-selected." !important;
 }
 
-table > tr:only-child:after,
-table > tbody > tr:only-child:after {
-  background: #8F8;
-  content: 'Only one TR in TABLE.  Are you using it for layout?';
+[role="combobox"]:not([aria-expanded]) {
+  --debugcss-message: "Combobox role is missing aria-expanded." !important;
 }
 
-table > *:not(thead):not(tfoot):not(tbody):not(tr):not(colgroup):not(caption):after {
-  background: #FF8;
-  content: 'Only THEAD/TFOOT/TBODY/COLGROUP/CAPTION/TR can be children of a TABLE';
+[role="dialog"]:not([aria-label]):not([aria-labelledby]) {
+  --debugcss-message: "Dialog role needs an accessible name." !important;
 }
 
-colgroup *:not(col):after {
-  background: #FF8;
-  content: 'Only COLs can be children of COLGROUP';
+[role="progressbar"]:not([aria-valuenow]) {
+  --debugcss-message: "Progressbar role is missing aria-valuenow." !important;
 }
 
-input:not([id]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-select:not([id]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-textarea:not([id]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
-  background: #FF8;
-  content: 'INPUT, SELECT and TEXTAREA should have an ID with an associated LABEL';
+input[type="radio"]:not([name]) {
+  --debugcss-message: "Radio input needs a name to participate in a group." !important;
 }
 
-input:not([name]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-select:not([name]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-textarea:not([name]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
-  background: #FF8;
-  content: 'INPUT, SELECT and TEXTAREA should have a NAME value';
+/*********************/
+/* WARNING MESSAGES */
+/*********************/
+
+[aria-label=""],
+[aria-labelledby=""],
+[aria-describedby=""] {
+  --debugcss-message: "ARIA naming or description attribute is empty." !important;
 }
 
-*[role="slider"]:not([aria-valuemin]):after,
-*[role="slider"]:not([aria-valuemax]):after,
-*[role="slider"]:not([aria-valuenow]):after,
-*[role="slider"]:not([aria-valuetext]):after {
-  background: #FF8;
-  content: 'Sliders should have ARIA-VALUEMIN, ARIA-VALUMAX, ARIA-VALUENOW and ARIA-VALUETEXT';
+iframe:not([title]):not([aria-label]):not([aria-labelledby]),
+iframe[title=""] {
+  --debugcss-message: "Iframe needs a non-empty accessible name." !important;
 }
 
-input[type="number"]:not([min]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-input[type="number"]:not([max]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
-  background: #8F8;
-  content: 'INPUT type NUMBER should have a MIN and MAX value if known.';
+a[href^="javascript:" i] {
+  --debugcss-message: "javascript: URLs are fragile and inaccessible." !important;
 }
 
-*[style]:after,
-table[align]:after,
-table[bgcolor]:after,
-table[border]:after,
-table[cellpadding]:after,
-table[cellspacing]:after,
-*:not(img):not(iframe)[width]:after,
-*:not(img):not(iframe)[height]:after,
-*[border]:after {
-  background: #FF8;
-  content: 'Element has inline style';
+a[target="_blank"]:not([rel~="noopener" i]):not([rel~="noreferrer" i]) {
+  --debugcss-message: "target=\"_blank\" should include rel=\"noopener\" or rel=\"noreferrer\"." !important;
 }
 
-*:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):not(textarea):empty:after {
-  background: #FF8;
-  content: 'Element is empty. Is this necessary?';
+a:not([href]),
+a[href=""],
+a[href="#"] {
+  --debugcss-message: "Anchor has no real destination." !important;
 }
 
-*[title]:empty:after {
-  background: #FF8;
-  content: 'Element with title but no content. May have difficulty being read by screen readers.';
+main ~ main {
+  --debugcss-message: "Only one <main> landmark should appear per document." !important;
 }
 
-a a:after {
-  background: #F88;
-  content: 'A tag within another A tag - this looks like a bug';
+:is(h1, h2, h3, h4, h5, h6):empty {
+  --debugcss-message: "Heading is empty." !important;
 }
 
-img:not([alt]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
-  background: #FF8;
-  content: 'Image does not have an ALT attribute';
+:is(ul, ol) > :not(li) {
+  --debugcss-message: "Only <li> elements belong directly inside lists." !important;
 }
 
-img[alt=""] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
-  background: #8F8;
-  content: 'Image has an empty ALT attribute. This image will not be read to screen readers.';
+dl > :not(dt):not(dd) {
+  --debugcss-message: "Only <dt> and <dd> belong directly inside <dl>." !important;
 }
 
-img:not([src]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-img[src=""] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before,
-img[src="#"] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
-  background: #F88;
-  content: 'IMG without proper SRC attribute.  Serious implications for some browsers';
+center,
+font,
+marquee,
+blink {
+  --debugcss-message: "Deprecated element found." !important;
 }
 
-img[src="spacer.gif"] ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
-  background: #FF8;
-  content: 'spacer.gif used - is this used for layout?';
+table thead td {
+  --debugcss-message: "Header cells in <thead> should usually be <th>." !important;
 }
 
-a[href="#"]:after,
-a[href=""]:after,
-a:not([href]):after {
-  background: #FF8;
-  content: 'Anchor tag is # or does not exist - does not degrade gracefully';
+[role="button"]:not(button):not(input):not(a[href]):not([tabindex]) {
+  --debugcss-message: "role=\"button\" needs keyboard focus support." !important;
 }
 
-a[href*=javascript\:]:after,
-a[onclick]:after,
-a[onmouseover]:after,
-a[onmouseout]:after {
-  background: #FF8;
-  content: 'Inline JS on anchor';
+[tabindex]:not([tabindex="-1"]):not([tabindex="0"]) {
+  --debugcss-message: "Positive tabindex can create a confusing focus order." !important;
 }
 
-label:not([for]):after {
-  background: #FF8;
-  content: 'Should LABEL have a FOR attribute?';
+summary:empty {
+  --debugcss-message: "<summary> is empty." !important;
 }
 
-div[role="img"]:not([aria-label]):after {
-  background: #FF8;
-  content: 'DIV used as image should have ARIA-LABEL';
+caption:empty {
+  --debugcss-message: "<caption> is empty." !important;
 }
 
-h1 div:after,
-h2 div:after,
-h3 div:after,
-h4 div:after,
-h5 div:after,
-h6 div:after,
-span div:after,
-html[xmlns] a div:after,
-html[xmlns] a h1:after,
-html[xmlns] a h2:after,
-html[xmlns] a h3:after,
-html[xmlns] a h4:after,
-html[xmlns] a h5:after,
-html[xmlns] a h6:after {
-  background: #FF8;
-  content: 'Block level element within inline element';
+video[autoplay]:not([muted]) {
+  --debugcss-message: "Autoplaying video should usually be muted." !important;
 }
 
-ol > *:not(li):after,
-ul > *:not(li):after {
-  background: #FF8;
-  content: 'Only LIs can be children of UL or OL';
+audio[autoplay] {
+  --debugcss-message: "Autoplaying audio is a strong accessibility smell." !important;
 }
 
-dl > *:not(dt):not(dd):after {
-  background: #FF8;
-  content: 'Only DT/DD can be children of a DL';
+/********************/
+/* NOTICE MESSAGES */
+/********************/
+
+table[summary] {
+  --debugcss-message: "table[summary] is obsolete in modern HTML." !important;
 }
 
-form > *:not(fieldset):after {
-  background: #8F8;
-  content: 'Should you be using a FIELDSET?';
+table th:not([scope]):not([headers]):not([id]) {
+  --debugcss-message: "Table header is missing scope or an explicit header relationship." !important;
 }
 
-fieldset > *:not(legend):first-child:after {
-  background: #8F8;
-  content: 'Should your FIELDSET be using a LEGEND?';
+img[alt=""] {
+  --debugcss-message: "Image has empty alt text. Verify that it is decorative." !important;
 }
 
-iframe:not([title]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
-  background: #FF8;
-  content: 'IFRAME lacks TITLE attribute';
+img[role="presentation"][alt]:not([alt=""]) {
+  --debugcss-message: "Presentational images should usually use alt=\"\"." !important;
 }
 
-center:after,
-u:after,
-font:after {
-  background: #FF8;
-  content: 'Deprecated tag used';
-}
-
-*[style="[object Object]"]:after {
-  background: #FF8;
-  content: 'STYLE improperly set with OBJECT';
-}
-
-*[class^="1"]:after,
-*[class^="2"]:after,
-*[class^="3"]:after,
-*[class^="4"]:after,
-*[class^="5"]:after,
-*[class^="6"]:after,
-*[class^="7"]:after,
-*[class^="8"]:after,
-*[class^="9"]:after,
-*[class^="0"]:after {
-  background: #FF8;
-  content: 'Class name cannot start with number';
-}
-
-*[id^="1"]:after,
-*[id^="2"]:after,
-*[id^="3"]:after,
-*[id^="4"]:after,
-*[id^="5"]:after,
-*[id^="6"]:after,
-*[id^="7"]:after,
-*[id^="8"]:after,
-*[id^="9"]:after,
-*[id^="0"]:after {
-  background: #FF8;
-  content: 'ID cannot start with number';
-}
-
-*[class*=left]:after,
-*[class*=right]:not([class*=opyright]):after,
-*[class*=bottom]:after,
-*[class*=center]:after,
-*[class*=clear]:after,
-*[class*=float]:after,
-*[class*=large]:after,
-*[class*=small]:after,
-*[class*=blue]:after,
-*[class*=green]:after,
-*[class*=yellow]:after,
-*[class*=white]:after,
-*[class*=black]:after,
-*[class*=Left]:after,
-*[class*=Right]:after,
-*[class*=Bottom]:after,
-*[class*=Center]:after,
-*[class*=Clear]:after,
-*[class*=Float]:after,
-*[class*=Large]:after,
-*[class*=Small]:after,
-*[class*=Blue]:after,
-*[class*=Green]:after,
-*[class*=Yellow]:after,
-*[class*=White]:after,
-*[class*=Black]:after {
-  background: #8F8;
-  /* I know that these aren't necessarily bad, but probably worth highlighting */
-  content: attr(class) ' has implied style meaning - should you be naming it differently?';
-}
-
-*[id*=left]:after,
-*[id*=right]:not([id*=opyright]):after,
-*[id*=bottom]:after,
-*[id*=center]:after,
-*[id*=clear]:after,
-*[id*=float]:after,
-*[id*=large]:after,
-*[id*=small]:after,
-*[id*=blue]:after,
-*[id*=green]:after,
-*[id*=yellow]:after,
-*[id*=white]:after,
-*[id*=black]:after,
-*[id*=Left]:after,
-*[id*=Right]:after,
-*[id*=Bottom]:after,
-*[id*=Center]:after,
-*[id*=Clear]:after,
-*[id*=Float]:after,
-*[id*=Large]:after,
-*[id*=Small]:after,
-*[id*=Blue]:after,
-*[id*=Green]:after,
-*[id*=Yellow]:after,
-*[id*=White]:after,
-*[id*=Black]:after {
-  background: #8F8;
-  /* I know that these aren't necessarily bad, but probably worth highlighting */
-  content: attr(id) ' has implied style meaning - should you be naming it differently?';
-}
-
-*[class*=\\]:after,
-*[class*=\.]:after,
-*[class*=\#]:after {
-  background: #F88;
-  content: 'Classname has an ambiguous character';
-}
-
-*[id*=\\]:after,
-*[id*=\.]:after,
-*[id*=\#]:after {
-  background: #F88;
-  content: 'ID has an ambiguous character';
-}
-
-*[class*=\~]:after,
-*[class*=\!]:after,
-*[class*=\@]:after,
-*[class*=\$]:after,
-*[class*=\%]:after,
-*[class*=\^]:after,
-*[class*=\&]:after,
-*[class*=\*]:after,
-*[class*=\(]:after,
-*[class*=\)]:after,
-*[class*=\=]:after,
-*[class*=\,]:after,
-*[class*=\/]:after,
-*[class*=\']:after,
-*[class*=\;]:after,
-*[class*=\:]:after,
-*[class*=\"]:after,
-*[class*=\?]:after,
-*[class*=\>]:after,
-*[class*=\<]:after,
-*[class*=\[]:after,
-*[class*=\]]:after,
-*[class*=\{]:after,
-*[class*=\}]:after,
-*[class*=\|]:after,
-*[class*=\`]:after {
-  background: #FF8;
-  content: 'Class has an illegal character';
-}
-
-*[id*=\~]:after,
-*[id*=\!]:after,
-*[id*=\@]:after,
-*[id*=\$]:after,
-*[id*=\%]:after,
-*[id*=\^]:after,
-*[id*=\&]:after,
-*[id*=\*]:after,
-*[id*=\(]:after,
-*[id*=\)]:after,
-*[id*=\=]:after,
-*[id*=\,]:after,
-*[id*=\/]:after,
-*[id*=\']:after,
-*[id*=\;]:after,
-*[id*=\:]:after,
-*[id*=\"]:after,
-*[id*=\?]:after,
-*[id*=\>]:after,
-*[id*=\<]:after,
-*[id*=\[]:after,
-*[id*=\]]:after,
-*[id*=\{]:after,
-*[id*=\}]:after,
-*[id*=\|]:after,
-*[id*=\`]:after {
-  background: #FF8;
-  content: 'ID has an illegal character';
-}
-
-/* These may not be "wrong", but let's bug you anyway. */
-map:after {
-  background: #8F8;
-  content: 'Is MAP appropriate here?';
-}
-
-br ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(img):not(input):first-of-type:before {
-  background: #8F8;
-  content: 'Is BR appropriate here?';
-}
-
-br + br ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
-  background: #8F8;
-  content: 'Should you be using a P tag?';
-}
-
-b:after,
-i:after {
-  background: #8F8;
-  content: 'Should you be using STRONG or EM?';
-}
-
-blink:after,
-marquee:after {
-  background: #FF8;
-  content: 'Should you be using STRONG or EM?';
-}
-
-script:not([type]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
-  background: #8F8;
-  content: 'script tag without type defined';
-}
-
-style:not([type]) ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
-  background: #8F8;
-  content: 'style tag without type defined';
-}
-
-body script ~ *:not(script):before {
-  background: #8F8;
-  content: 'script tag should be at the bottom of your body';
-}
-
-body style ~ *:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):first-of-type:before {
-  background: #8F8;
-  content: 'CSS should be in your head';
-}
-
-/******************/
-/* ERROR OUTLINES */
-/******************/
-
-/* In addition to printing the error message next to the element, outline the
-   element so it's easy to spot.  Use outline instead of border to avoid
-   messing with the document flow.
-*/
-a a,
-img:not([src]),
-img[src=""],
-img[src="#"],
-/*
-img[src*="&"]:not([src*="&amp;"]),
-a[href*="&"]:not([href*="&amp;"]),
-*/
-*[class*=\\],
-*[class*=\.],
-*[class*=\#],
-*[id*=\\],
-*[id*=\.],
-*[id*=\#] {
-  counter-increment: error;
-  outline: 5px solid #F88;
-}
-
-table > tr,
-table > colgroup ~ caption,
-table > thead ~ colgroup,
-table > tfoot ~ colgroup,
-table > tbody ~ colgroup,
-table > thead ~ caption,
-table > tfoot ~ caption,
-table > tbody ~ caption,
-table > tfoot ~ thead,
-table > tbody ~ tfoot,
-table > tbody ~ thead,
-colgroup *:not(col),
-table > *:not(thead):not(tfoot):not(tbody):not(tr):not(colgroup):not(caption),
-*[style],
-table[align],
-table[bgcolor],
-input:not([id]),
-select:not([id]),
-textarea:not([id]),
-input:not([name]),
-select:not([name]),
-textarea:not([name]),
-*[role="slider"]:not([aria-valuemin]),
-*[role="slider"]:not([aria-valuemax]),
-*[role="slider"]:not([aria-valuenow]),
-*[role="slider"]:not([aria-valuetext]),
-input[type="number"]:not([min]),
-input[type="number"]:not([max]),
+:is(table, td, th, img)[align],
+:is(table, td, th)[bgcolor],
+:is(table, td, th)[valign],
 table[border],
 table[cellpadding],
-table[cellspacing],
-*:not(img):not(iframe)[width],
-*:not(img):not(iframe)[height],
-*[border],
-*:not(area):not(base):not(br):not(col):not(embed):not(hr):not(iframe):not(img):not(input):not(textarea):empty,
-*[title]:empty,
-img:not([alt]),
-img[src="spacer.gif"],
-button:empty,
-a:not([href]),
-a[href="#"],
-a[href=""],
-a[href*=javascript\:],
-a[onclick],
-a[onmouseover],
-a[onmouseout],
-label:not([for]),
-div[role="img"]:not([aria-label]),
-h1 div,
-h2 div,
-h3 div,
-h4 div,
-h5 div,
-h6 div,
-span div,
-html[xmlns] a div,
-html[xmlns] a h1,
-html[xmlns] a h2,
-html[xmlns] a h3,
-html[xmlns] a h4,
-html[xmlns] a h5,
-html[xmlns] a h6,
-ol > *:not(li),
-ul > *:not(li),
-dl > *:not(dt):not(dd),
-iframe:not([title]),
-*[style="[object Object]"],
-*[class^="1"],
-*[class^="2"],
-*[class^="3"],
-*[class^="4"],
-*[class^="5"],
-*[class^="6"],
-*[class^="7"],
-*[class^="8"],
-*[class^="9"],
-*[class^="0"],
-*[id^="1"],
-*[id^="2"],
-*[id^="3"],
-*[id^="4"],
-*[id^="5"],
-*[id^="6"],
-*[id^="7"],
-*[id^="8"],
-*[id^="9"],
-*[id^="0"],
-*[class*=\~],
-*[class*=\!],
-*[class*=\@],
-*[class*=\$],
-*[class*=\%],
-*[class*=\^],
-*[class*=\&],
-*[class*=\*],
-*[class*=\(],
-*[class*=\)],
-*[class*=\=],
-*[class*=\,],
-*[class*=\/],
-*[class*=\'],
-*[class*=\;],
-*[class*=\:],
-*[class*=\?],
-*[class*=\>],
-*[class*=\<],
-*[class*=\[],
-*[class*=\]],
-*[class*=\{],
-*[class*=\}],
-*[class*=\|],
-*[class*=\`],
-*[id*=\~],
-*[id*=\!],
-*[id*=\@],
-*[id*=\$],
-*[id*=\%],
-*[id*=\^],
-*[id*=\&],
-*[id*=\*],
-*[id*=\(],
-*[id*=\)],
-*[id*=\=],
-*[id*=\,],
-*[id*=\/],
-*[id*=\'],
-*[id*=\;],
-*[id*=\:],
-*[id*=\?],
-*[id*=\>],
-*[id*=\<],
-*[id*=\[],
-*[id*=\]],
-*[id*=\{],
-*[id*=\}],
-*[id*=\|],
-*[id*=\`],
-center,
-u,
-font,
-blink,
-marquee {
-  counter-increment: warning;
-  outline: 5px solid #FF8;
+table[cellspacing] {
+  --debugcss-message: "Legacy presentational HTML attribute found." !important;
 }
 
-img[alt=""],
-table[summary],
-table > *:first-child:not(caption),
-table th:not([scope]),
-table thead td,
-table > tr:first-child:last-child,
-table > tbody > tr:first-child:last-child,
-table > tbody:first-child,
-input[type="number"]:not([min]),
-input[type="number"]:not([max]),
-form > *:not(fieldset),
-fieldset > *:not(legend):first-child,
-map,
-br,
-b,
-i,
-*[class*=left],
-*[class*=right]:not([class*=opyright]),
-*[class*=bottom],
-*[class*=center],
-*[class*=clear],
-*[class*=float],
-*[class*=large],
-*[class*=small],
-*[class*=blue],
-*[class*=green],
-*[class*=yellow],
-*[class*=white],
-*[class*=black],
-*[class*=Left],
-*[class*=Right],
-*[class*=Bottom],
-*[class*=Center],
-*[class*=Clear],
-*[class*=Float],
-*[class*=Large],
-*[class*=Small],
-*[class*=Blue],
-*[class*=Green],
-*[class*=Yellow],
-*[class*=White],
-*[class*=Black],
-*[id*=left],
-*[id*=right]:not([id*=opyright]),
-*[id*=bottom],
-*[id*=center],
-*[id*=clear],
-*[id*=float],
-*[id*=large],
-*[id*=small],
-*[id*=blue],
-*[id*=green],
-*[id*=yellow],
-*[id*=white],
-*[id*=black],
-*[id*=Left],
-*[id*=Right],
-*[id*=Bottom],
-*[id*=Center],
-*[id*=Clear],
-*[id*=Float],
-*[id*=Large],
-*[id*=Small],
-*[id*=Blue],
-*[id*=Green],
-*[id*=Yellow],
-*[id*=White],
-*[id*=Black],
-script:not([type]),
-style:not([type]),
-body script ~ *:not(script),
-body style {
-  counter-increment: notice;
-  outline: 5px solid #8F8;
+[id=""] {
+  --debugcss-message: "id attribute is present but empty." !important;
 }
 
-body {
-  counter-reset: error warning notice;
+[for=""] {
+  --debugcss-message: "for attribute is present but empty." !important;
 }
 
-body:after {
-  background: #FFF;
-  content: 'Errors: ' counter(error) ' | Warnings: ' counter(warning) ' | Notices: ' counter(notice);
-  font-size: 125%;
-  right: 1em;
-  outline: 5px solid #000;
-  position: fixed;
-  bottom: 1em;
+[accesskey] {
+  --debugcss-message: "accesskey can create hard-to-discover keyboard conflicts." !important;
+}
+
+form button:not([type]) {
+  --debugcss-message: "Button inside a form should usually declare its type." !important;
+}
+
+input[pattern]:not([title]):not([aria-describedby]):not([aria-description]) {
+  --debugcss-message: "Pattern-constrained input should explain the expected format." !important;
+}
+
+/**************************/
+/* MODERN SELECTOR CHECKS */
+/**************************/
+
+@supports selector(:has(*)) {
+  :where(
+    html:not(:has(head > title)),
+    html:not(:has(head > meta[charset])),
+    html:not(:has(main, [role="main"])),
+    label:not([for]):not(:has(:is(input, select, textarea, meter, progress))),
+    :is(input:not([type="hidden"]), select, textarea, meter, progress):not([id]):not([aria-label]):not([aria-labelledby]):not(label :is(input, select, textarea, meter, progress)),
+    [role="img"]:not(img):not(svg):not([aria-label]):not([aria-labelledby]),
+    svg[role="img"]:not([aria-label]):not([aria-labelledby]):not(:has(> title)),
+    svg[role="img"]:has(> title:empty),
+    details:not(:has(> summary)),
+    fieldset:not(:has(> legend)),
+    table:not([role="presentation"]):not(:has(> caption)),
+    video[controls]:not(:has(track[kind="captions"], track[kind="subtitles"])),
+    section:not([aria-label]):not([aria-labelledby]):not(:has(:is(h1, h2, h3, h4, h5, h6)))
+  ) {
+    outline: var(--debugcss-outline-width) solid var(--debugcss-tone) !important;
+    outline-offset: 2px !important;
+    position: relative;
+  }
+
+  :where(
+    html:not(:has(head > title)),
+    html:not(:has(head > meta[charset])),
+    html:not(:has(main, [role="main"])),
+    label:not([for]):not(:has(:is(input, select, textarea, meter, progress))),
+    :is(input:not([type="hidden"]), select, textarea, meter, progress):not([id]):not([aria-label]):not([aria-labelledby]):not(label :is(input, select, textarea, meter, progress)),
+    [role="img"]:not(img):not(svg):not([aria-label]):not([aria-labelledby]),
+    svg[role="img"]:not([aria-label]):not([aria-labelledby]):not(:has(> title)),
+    svg[role="img"]:has(> title:empty),
+    details:not(:has(> summary)),
+    fieldset:not(:has(> legend)),
+    table:not([role="presentation"]):not(:has(> caption)),
+    video[controls]:not(:has(track[kind="captions"], track[kind="subtitles"])),
+    section:not([aria-label]):not([aria-labelledby]):not(:has(:is(h1, h2, h3, h4, h5, h6)))
+  )::after {
+    all: initial !important;
+    background: var(--debugcss-tone) !important;
+    border: 1px solid rgba(17, 24, 39, 0.8) !important;
+    border-radius: 4px !important;
+    box-shadow: var(--debugcss-shadow) !important;
+    box-sizing: border-box !important;
+    color: var(--debugcss-text) !important;
+    content: var(--debugcss-message) !important;
+    display: block !important;
+    font: var(--debugcss-font) !important;
+    left: 0 !important;
+    max-width: min(28rem, calc(100vw - 1rem)) !important;
+    opacity: var(--debugcss-chip-opacity) !important;
+    padding: 0.22rem 0.45rem !important;
+    pointer-events: none !important;
+    position: absolute !important;
+    top: 0 !important;
+    transform: translate(0.25rem, 0.25rem) !important;
+    transition: var(--debugcss-chip-transition) !important;
+    white-space: normal !important;
+    z-index: var(--debugcss-z) !important;
+  }
+
+  html[data-debugcss-compact] :where(
+      label:not([for]):not(:has(:is(input, select, textarea, meter, progress))),
+      :is(input:not([type="hidden"]), select, textarea, meter, progress):not([id]):not([aria-label]):not([aria-labelledby]):not(label :is(input, select, textarea, meter, progress)),
+      [role="img"]:not(img):not(svg):not([aria-label]):not([aria-labelledby]),
+      svg[role="img"]:not([aria-label]):not([aria-labelledby]):not(:has(> title)),
+      svg[role="img"]:has(> title:empty),
+      details:not(:has(> summary)),
+      fieldset:not(:has(> legend)),
+      table:not([role="presentation"]):not(:has(> caption)),
+      video[controls]:not(:has(track[kind="captions"], track[kind="subtitles"])),
+      section:not([aria-label]):not([aria-labelledby]):not(:has(:is(h1, h2, h3, h4, h5, h6)))
+    ):is(:hover, :focus, :focus-within) {
+    --debugcss-chip-opacity: 1;
+  }
+
+  :where(
+    table:not([role="presentation"]):not(:has(> caption)),
+    section:not([aria-label]):not([aria-labelledby]):not(:has(:is(h1, h2, h3, h4, h5, h6)))
+  ) {
+    --debugcss-tone: var(--debugcss-notice) !important;
+    counter-increment: debugcss-notice debugcss-a11y !important;
+  }
+
+  html:not(:has(head > meta[charset])) {
+    --debugcss-tone: var(--debugcss-notice) !important;
+    counter-increment: debugcss-notice debugcss-structure !important;
+  }
+
+  :where(
+    label:not([for]):not(:has(:is(input, select, textarea, meter, progress))),
+    :is(input:not([type="hidden"]), select, textarea, meter, progress):not([id]):not([aria-label]):not([aria-labelledby]):not(label :is(input, select, textarea, meter, progress)),
+    [role="img"]:not(img):not(svg):not([aria-label]):not([aria-labelledby]),
+    svg[role="img"]:not([aria-label]):not([aria-labelledby]):not(:has(> title)),
+    svg[role="img"]:has(> title:empty),
+    details:not(:has(> summary)),
+    fieldset:not(:has(> legend)),
+    video[controls]:not(:has(track[kind="captions"], track[kind="subtitles"]))
+  ) {
+    --debugcss-tone: var(--debugcss-warning) !important;
+    counter-increment: debugcss-warning debugcss-a11y !important;
+  }
+
+  :where(
+    html:not(:has(head > title)),
+    html:not(:has(main, [role="main"])),
+    details:not(:has(> summary))
+  ) {
+    --debugcss-tone: var(--debugcss-warning) !important;
+    counter-increment: debugcss-warning debugcss-structure !important;
+  }
+
+  html:not(:has(head > title)) {
+    --debugcss-message: "Document is missing a <title> element." !important;
+  }
+
+  html:not(:has(head > meta[charset])) {
+    --debugcss-message: "Document is missing a declared character encoding." !important;
+  }
+
+  html:not(:has(main, [role="main"])) {
+    --debugcss-message: "Document is missing a main landmark." !important;
+  }
+
+  label:not([for]):not(:has(:is(input, select, textarea, meter, progress))) {
+    --debugcss-message: "Label has no for attribute and does not wrap a control." !important;
+  }
+
+  :is(input:not([type="hidden"]), select, textarea, meter, progress):not([id]):not([aria-label]):not([aria-labelledby]):not(label :is(input, select, textarea, meter, progress)) {
+    --debugcss-message: "Form control has no id and no obvious built-in label path." !important;
+  }
+
+  [role="img"]:not(img):not(svg):not([aria-label]):not([aria-labelledby]) {
+    --debugcss-message: "role=\"img\" element needs an accessible name." !important;
+  }
+
+  svg[role="img"]:not([aria-label]):not([aria-labelledby]):not(:has(> title)) {
+    --debugcss-message: "Inline SVG used as an image needs a name or <title>." !important;
+  }
+
+  svg[role="img"]:has(> title:empty) {
+    --debugcss-message: "Inline SVG title exists but is empty." !important;
+  }
+
+  details:not(:has(> summary)) {
+    --debugcss-message: "<details> should contain a <summary>." !important;
+  }
+
+  fieldset:not(:has(> legend)) {
+    --debugcss-message: "Fieldset is missing a legend." !important;
+  }
+
+  table:not([role="presentation"]):not(:has(> caption)) {
+    --debugcss-message: "Data table has no caption." !important;
+  }
+
+  video[controls]:not(:has(track[kind="captions"], track[kind="subtitles"])) {
+    --debugcss-message: "Video with controls has no captions or subtitles track." !important;
+  }
+
+  section:not([aria-label]):not([aria-labelledby]):not(:has(:is(h1, h2, h3, h4, h5, h6))) {
+    --debugcss-message: "Section has no heading or accessible name." !important;
+  }
+}
+
+/********************/
+/* VISUAL FILTERING */
+/********************/
+
+html[data-debugcss-mode]:not([data-debugcss-mode~="a11y"]) :where(
+    img:not([alt]),
+    input[type="image"]:is(:not([alt]), [alt=""]),
+    area[href]:is(:not([alt]), [alt=""]),
+    button:empty:not([aria-label]):not([aria-labelledby]),
+    a[href]:empty:not([aria-label]):not([aria-labelledby]),
+    :is(
+        a[href],
+        button,
+        input:not([type="hidden"]),
+        select,
+        textarea,
+        summary,
+        iframe,
+        [tabindex]:not([tabindex="-1"]),
+        audio[controls],
+        video[controls],
+        [contenteditable="true"],
+        [contenteditable="plaintext-only"]
+      )[aria-hidden="true"],
+    [aria-hidden="true"] :is(
+        a[href],
+        button,
+        input:not([type="hidden"]),
+        select,
+        textarea,
+        summary,
+        iframe,
+        [tabindex]:not([tabindex="-1"]),
+        audio[controls],
+        video[controls],
+        [contenteditable="true"],
+        [contenteditable="plaintext-only"]
+      ),
+    [aria-label=""],
+    [aria-labelledby=""],
+    [aria-describedby=""],
+    iframe:not([title]):not([aria-label]):not([aria-labelledby]),
+    iframe[title=""],
+    :is(h1, h2, h3, h4, h5, h6):empty,
+    table th:not([scope]):not([headers]):not([id]),
+    img[alt=""],
+    img[role="presentation"][alt]:not([alt=""]),
+    [role="slider"]:not([aria-valuemin]),
+    [role="slider"]:not([aria-valuemax]),
+    [role="slider"]:not([aria-valuenow]),
+    [role="button"]:not(button):not(input):not(a[href]):not([tabindex]),
+    [role="checkbox"]:not([aria-checked]),
+    [role="radio"]:not([aria-checked]),
+    [role="switch"]:not([aria-checked]),
+    [role="tab"]:not([aria-selected]),
+    [role="combobox"]:not([aria-expanded]),
+    [role="dialog"]:not([aria-label]):not([aria-labelledby]),
+    [role="progressbar"]:not([aria-valuenow]),
+    [tabindex]:not([tabindex="-1"]):not([tabindex="0"]),
+    [accesskey],
+    input[type="radio"]:not([name]),
+    input[pattern]:not([title]):not([aria-describedby]):not([aria-description]),
+    summary:empty,
+    caption:empty,
+    video[autoplay]:not([muted]),
+    audio[autoplay]
+  ) {
+  counter-increment: none !important;
+  outline: none !important;
+}
+
+html[data-debugcss-mode]:not([data-debugcss-mode~="a11y"]) :where(
+    img:not([alt]),
+    input[type="image"]:is(:not([alt]), [alt=""]),
+    area[href]:is(:not([alt]), [alt=""]),
+    button:empty:not([aria-label]):not([aria-labelledby]),
+    a[href]:empty:not([aria-label]):not([aria-labelledby]),
+    :is(
+        a[href],
+        button,
+        input:not([type="hidden"]),
+        select,
+        textarea,
+        summary,
+        iframe,
+        [tabindex]:not([tabindex="-1"]),
+        audio[controls],
+        video[controls],
+        [contenteditable="true"],
+        [contenteditable="plaintext-only"]
+      )[aria-hidden="true"],
+    [aria-hidden="true"] :is(
+        a[href],
+        button,
+        input:not([type="hidden"]),
+        select,
+        textarea,
+        summary,
+        iframe,
+        [tabindex]:not([tabindex="-1"]),
+        audio[controls],
+        video[controls],
+        [contenteditable="true"],
+        [contenteditable="plaintext-only"]
+      ),
+    [aria-label=""],
+    [aria-labelledby=""],
+    [aria-describedby=""],
+    iframe:not([title]):not([aria-label]):not([aria-labelledby]),
+    iframe[title=""],
+    :is(h1, h2, h3, h4, h5, h6):empty,
+    table th:not([scope]):not([headers]):not([id]),
+    img[alt=""],
+    img[role="presentation"][alt]:not([alt=""]),
+    [role="slider"]:not([aria-valuemin]),
+    [role="slider"]:not([aria-valuemax]),
+    [role="slider"]:not([aria-valuenow]),
+    [role="button"]:not(button):not(input):not(a[href]):not([tabindex]),
+    [role="checkbox"]:not([aria-checked]),
+    [role="radio"]:not([aria-checked]),
+    [role="switch"]:not([aria-checked]),
+    [role="tab"]:not([aria-selected]),
+    [role="combobox"]:not([aria-expanded]),
+    [role="dialog"]:not([aria-label]):not([aria-labelledby]),
+    [role="progressbar"]:not([aria-valuenow]),
+    [tabindex]:not([tabindex="-1"]):not([tabindex="0"]),
+    [accesskey],
+    input[type="radio"]:not([name]),
+    input[pattern]:not([title]):not([aria-describedby]):not([aria-description]),
+    summary:empty,
+    caption:empty,
+    video[autoplay]:not([muted]),
+    audio[autoplay]
+  )::after {
+  content: none !important;
+}
+
+html[data-debugcss-mode]:not([data-debugcss-mode~="structure"]) :where(
+    img:is(:not([src]), [src=""], [src="#"]),
+    a a,
+    a:not([href]),
+    a[href=""],
+    a[href="#"],
+    main ~ main,
+    :is(ul, ol) > :not(li),
+    dl > :not(dt):not(dd),
+    table thead td,
+    [id=""],
+    [for=""],
+    form button:not([type])
+  ) {
+  counter-increment: none !important;
+  outline: none !important;
+}
+
+html[data-debugcss-mode]:not([data-debugcss-mode~="structure"]) :where(
+    img:is(:not([src]), [src=""], [src="#"]),
+    a a,
+    a:not([href]),
+    a[href=""],
+    a[href="#"],
+    main ~ main,
+    :is(ul, ol) > :not(li),
+    dl > :not(dt):not(dd),
+    table thead td,
+    [id=""],
+    [for=""],
+    form button:not([type])
+  )::after {
+  content: none !important;
+}
+
+html[data-debugcss-mode]:not([data-debugcss-mode~="legacy"]) :where(
+    center,
+    font,
+    marquee,
+    blink,
+    table[summary],
+    :is(table, td, th, img)[align],
+    :is(table, td, th)[bgcolor],
+    :is(table, td, th)[valign],
+    table[border],
+    table[cellpadding],
+    table[cellspacing]
+  ) {
+  counter-increment: none !important;
+  outline: none !important;
+}
+
+html[data-debugcss-mode]:not([data-debugcss-mode~="legacy"]) :where(
+    center,
+    font,
+    marquee,
+    blink,
+    table[summary],
+    :is(table, td, th, img)[align],
+    :is(table, td, th)[bgcolor],
+    :is(table, td, th)[valign],
+    table[border],
+    table[cellpadding],
+    table[cellspacing]
+  )::after {
+  content: none !important;
+}
+
+html[data-debugcss-mode]:not([data-debugcss-mode~="security"]) :where(
+    a[href^="javascript:" i],
+    a[target="_blank"]:not([rel~="noopener" i]):not([rel~="noreferrer" i])
+  ) {
+  counter-increment: none !important;
+  outline: none !important;
+}
+
+html[data-debugcss-mode]:not([data-debugcss-mode~="security"]) :where(
+    a[href^="javascript:" i],
+    a[target="_blank"]:not([rel~="noopener" i]):not([rel~="noreferrer" i])
+  )::after {
+  content: none !important;
+}
+
+html[data-debugcss-level]:not([data-debugcss-level~="error"]) :where(
+    img:not([alt]),
+    img:is(:not([src]), [src=""], [src="#"]),
+    input[type="image"]:is(:not([alt]), [alt=""]),
+    area[href]:is(:not([alt]), [alt=""]),
+    a a,
+    button:empty:not([aria-label]):not([aria-labelledby]),
+    a[href]:empty:not([aria-label]):not([aria-labelledby]),
+    :is(
+        a[href],
+        button,
+        input:not([type="hidden"]),
+        select,
+        textarea,
+        summary,
+        iframe,
+        [tabindex]:not([tabindex="-1"]),
+        audio[controls],
+        video[controls],
+        [contenteditable="true"],
+        [contenteditable="plaintext-only"]
+      )[aria-hidden="true"],
+    [aria-hidden="true"] :is(
+        a[href],
+        button,
+        input:not([type="hidden"]),
+        select,
+        textarea,
+        summary,
+        iframe,
+        [tabindex]:not([tabindex="-1"]),
+        audio[controls],
+        video[controls],
+        [contenteditable="true"],
+        [contenteditable="plaintext-only"]
+      ),
+    [role="slider"]:not([aria-valuemin]),
+    [role="slider"]:not([aria-valuemax]),
+    [role="slider"]:not([aria-valuenow]),
+    [role="checkbox"]:not([aria-checked]),
+    [role="radio"]:not([aria-checked]),
+    [role="switch"]:not([aria-checked]),
+    [role="tab"]:not([aria-selected]),
+    [role="combobox"]:not([aria-expanded]),
+    [role="dialog"]:not([aria-label]):not([aria-labelledby]),
+    [role="progressbar"]:not([aria-valuenow]),
+    input[type="radio"]:not([name])
+  ) {
+  counter-increment: none !important;
+  outline: none !important;
+}
+
+html[data-debugcss-level]:not([data-debugcss-level~="error"]) :where(
+    img:not([alt]),
+    img:is(:not([src]), [src=""], [src="#"]),
+    input[type="image"]:is(:not([alt]), [alt=""]),
+    area[href]:is(:not([alt]), [alt=""]),
+    a a,
+    button:empty:not([aria-label]):not([aria-labelledby]),
+    a[href]:empty:not([aria-label]):not([aria-labelledby]),
+    :is(
+        a[href],
+        button,
+        input:not([type="hidden"]),
+        select,
+        textarea,
+        summary,
+        iframe,
+        [tabindex]:not([tabindex="-1"]),
+        audio[controls],
+        video[controls],
+        [contenteditable="true"],
+        [contenteditable="plaintext-only"]
+      )[aria-hidden="true"],
+    [aria-hidden="true"] :is(
+        a[href],
+        button,
+        input:not([type="hidden"]),
+        select,
+        textarea,
+        summary,
+        iframe,
+        [tabindex]:not([tabindex="-1"]),
+        audio[controls],
+        video[controls],
+        [contenteditable="true"],
+        [contenteditable="plaintext-only"]
+      ),
+    [role="slider"]:not([aria-valuemin]),
+    [role="slider"]:not([aria-valuemax]),
+    [role="slider"]:not([aria-valuenow]),
+    [role="checkbox"]:not([aria-checked]),
+    [role="radio"]:not([aria-checked]),
+    [role="switch"]:not([aria-checked]),
+    [role="tab"]:not([aria-selected]),
+    [role="combobox"]:not([aria-expanded]),
+    [role="dialog"]:not([aria-label]):not([aria-labelledby]),
+    [role="progressbar"]:not([aria-valuenow]),
+    input[type="radio"]:not([name])
+  )::after {
+  content: none !important;
+}
+
+html[data-debugcss-level]:not([data-debugcss-level~="warning"]) :where(
+    [aria-label=""],
+    [aria-labelledby=""],
+    [aria-describedby=""],
+    iframe:not([title]):not([aria-label]):not([aria-labelledby]),
+    iframe[title=""],
+    a[href^="javascript:" i],
+    a[target="_blank"]:not([rel~="noopener" i]):not([rel~="noreferrer" i]),
+    a:not([href]),
+    a[href=""],
+    a[href="#"],
+    main ~ main,
+    :is(h1, h2, h3, h4, h5, h6):empty,
+    :is(ul, ol) > :not(li),
+    dl > :not(dt):not(dd),
+    center,
+    font,
+    marquee,
+    blink,
+    table thead td,
+    [role="button"]:not(button):not(input):not(a[href]):not([tabindex]),
+    [tabindex]:not([tabindex="-1"]):not([tabindex="0"]),
+    summary:empty,
+    caption:empty,
+    video[autoplay]:not([muted]),
+    audio[autoplay]
+  ) {
+  counter-increment: none !important;
+  outline: none !important;
+}
+
+html[data-debugcss-level]:not([data-debugcss-level~="warning"]) :where(
+    [aria-label=""],
+    [aria-labelledby=""],
+    [aria-describedby=""],
+    iframe:not([title]):not([aria-label]):not([aria-labelledby]),
+    iframe[title=""],
+    a[href^="javascript:" i],
+    a[target="_blank"]:not([rel~="noopener" i]):not([rel~="noreferrer" i]),
+    a:not([href]),
+    a[href=""],
+    a[href="#"],
+    main ~ main,
+    :is(h1, h2, h3, h4, h5, h6):empty,
+    :is(ul, ol) > :not(li),
+    dl > :not(dt):not(dd),
+    center,
+    font,
+    marquee,
+    blink,
+    table thead td,
+    [role="button"]:not(button):not(input):not(a[href]):not([tabindex]),
+    [tabindex]:not([tabindex="-1"]):not([tabindex="0"]),
+    summary:empty,
+    caption:empty,
+    video[autoplay]:not([muted]),
+    audio[autoplay]
+  )::after {
+  content: none !important;
+}
+
+html[data-debugcss-level]:not([data-debugcss-level~="notice"]) :where(
+    table[summary],
+    table th:not([scope]):not([headers]):not([id]),
+    img[alt=""],
+    img[role="presentation"][alt]:not([alt=""]),
+    :is(table, td, th, img)[align],
+    :is(table, td, th)[bgcolor],
+    :is(table, td, th)[valign],
+    table[border],
+    table[cellpadding],
+    table[cellspacing],
+    [id=""],
+    [for=""],
+    [accesskey],
+    form button:not([type]),
+    input[pattern]:not([title]):not([aria-describedby]):not([aria-description])
+  ) {
+  counter-increment: none !important;
+  outline: none !important;
+}
+
+html[data-debugcss-level]:not([data-debugcss-level~="notice"]) :where(
+    table[summary],
+    table th:not([scope]):not([headers]):not([id]),
+    img[alt=""],
+    img[role="presentation"][alt]:not([alt=""]),
+    :is(table, td, th, img)[align],
+    :is(table, td, th)[bgcolor],
+    :is(table, td, th)[valign],
+    table[border],
+    table[cellpadding],
+    table[cellspacing],
+    [id=""],
+    [for=""],
+    [accesskey],
+    form button:not([type]),
+    input[pattern]:not([title]):not([aria-describedby]):not([aria-description])
+  )::after {
+  content: none !important;
+}
+
+@supports selector(:has(*)) {
+  html[data-debugcss-compact]:is(
+      :not(:has(head > title)),
+      :not(:has(head > meta[charset])),
+      :not(:has(main, [role="main"]))
+    ) {
+    --debugcss-chip-opacity: 1;
+  }
+
+  html[data-debugcss-mode]:not([data-debugcss-mode~="a11y"]) :where(
+      label:not([for]):not(:has(:is(input, select, textarea, meter, progress))),
+      :is(input:not([type="hidden"]), select, textarea, meter, progress):not([id]):not([aria-label]):not([aria-labelledby]):not(label :is(input, select, textarea, meter, progress)),
+      [role="img"]:not(img):not(svg):not([aria-label]):not([aria-labelledby]),
+      svg[role="img"]:not([aria-label]):not([aria-labelledby]):not(:has(> title)),
+      svg[role="img"]:has(> title:empty),
+      fieldset:not(:has(> legend)),
+      table:not([role="presentation"]):not(:has(> caption)),
+      video[controls]:not(:has(track[kind="captions"], track[kind="subtitles"])),
+      section:not([aria-label]):not([aria-labelledby]):not(:has(:is(h1, h2, h3, h4, h5, h6)))
+    ) {
+    counter-increment: none !important;
+    outline: none !important;
+  }
+
+  html[data-debugcss-mode]:not([data-debugcss-mode~="a11y"]) :where(
+      label:not([for]):not(:has(:is(input, select, textarea, meter, progress))),
+      :is(input:not([type="hidden"]), select, textarea, meter, progress):not([id]):not([aria-label]):not([aria-labelledby]):not(label :is(input, select, textarea, meter, progress)),
+      [role="img"]:not(img):not(svg):not([aria-label]):not([aria-labelledby]),
+      svg[role="img"]:not([aria-label]):not([aria-labelledby]):not(:has(> title)),
+      svg[role="img"]:has(> title:empty),
+      fieldset:not(:has(> legend)),
+      table:not([role="presentation"]):not(:has(> caption)),
+      video[controls]:not(:has(track[kind="captions"], track[kind="subtitles"])),
+      section:not([aria-label]):not([aria-labelledby]):not(:has(:is(h1, h2, h3, h4, h5, h6)))
+    )::after {
+    content: none !important;
+  }
+
+  html[data-debugcss-mode]:not([data-debugcss-mode~="structure"]) :where(
+      details:not(:has(> summary))
+    ) {
+    counter-increment: none !important;
+    outline: none !important;
+  }
+
+  html[data-debugcss-mode]:not([data-debugcss-mode~="structure"]) :where(
+      details:not(:has(> summary))
+    )::after {
+    content: none !important;
+  }
+
+  html[data-debugcss-level]:not([data-debugcss-level~="warning"]) :where(
+      label:not([for]):not(:has(:is(input, select, textarea, meter, progress))),
+      :is(input:not([type="hidden"]), select, textarea, meter, progress):not([id]):not([aria-label]):not([aria-labelledby]):not(label :is(input, select, textarea, meter, progress)),
+      [role="img"]:not(img):not(svg):not([aria-label]):not([aria-labelledby]),
+      svg[role="img"]:not([aria-label]):not([aria-labelledby]):not(:has(> title)),
+      svg[role="img"]:has(> title:empty),
+      details:not(:has(> summary)),
+      fieldset:not(:has(> legend)),
+      video[controls]:not(:has(track[kind="captions"], track[kind="subtitles"]))
+    ) {
+    counter-increment: none !important;
+    outline: none !important;
+  }
+
+  html[data-debugcss-level]:not([data-debugcss-level~="warning"]) :where(
+      label:not([for]):not(:has(:is(input, select, textarea, meter, progress))),
+      :is(input:not([type="hidden"]), select, textarea, meter, progress):not([id]):not([aria-label]):not([aria-labelledby]):not(label :is(input, select, textarea, meter, progress)),
+      [role="img"]:not(img):not(svg):not([aria-label]):not([aria-labelledby]),
+      svg[role="img"]:not([aria-label]):not([aria-labelledby]):not(:has(> title)),
+      svg[role="img"]:has(> title:empty),
+      details:not(:has(> summary)),
+      fieldset:not(:has(> legend)),
+      video[controls]:not(:has(track[kind="captions"], track[kind="subtitles"]))
+    )::after {
+    content: none !important;
+  }
+
+  html[data-debugcss-level]:not([data-debugcss-level~="notice"]) :where(
+      table:not([role="presentation"]):not(:has(> caption)),
+      section:not([aria-label]):not([aria-labelledby]):not(:has(:is(h1, h2, h3, h4, h5, h6)))
+    ) {
+    counter-increment: none !important;
+    outline: none !important;
+  }
+
+  html[data-debugcss-level]:not([data-debugcss-level~="notice"]) :where(
+      table:not([role="presentation"]):not(:has(> caption)),
+      section:not([aria-label]):not([aria-labelledby]):not(:has(:is(h1, h2, h3, h4, h5, h6)))
+    )::after {
+    content: none !important;
+  }
+}
+
+/****************/
+/* DEBUG PANEL */
+/****************/
+
+body::after {
+  all: initial !important;
+  background: var(--debugcss-panel) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35) !important;
+  color: var(--debugcss-panel-text) !important;
+  content: "Errors " counter(debugcss-error) " | Warnings "
+    counter(debugcss-warning) " | Notices " counter(debugcss-notice) "\A"
+    "A11y " counter(debugcss-a11y) " | Structure "
+    counter(debugcss-structure) " | Legacy " counter(debugcss-legacy)
+    " | Security " counter(debugcss-security) !important;
+  display: block !important;
+  font: 700 13px/1.4 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif !important;
+  padding: 0.55rem 0.75rem !important;
+  pointer-events: none !important;
+  position: fixed !important;
+  right: 1rem !important;
+  bottom: 1rem !important;
+  white-space: pre !important;
+  z-index: 2147483647 !important;
 }
 
 /*********/
 /* EXTRA */
 /*********/
 
-/* Stuff that helps in developing / debugging, but don't quite fit anywhere
-   else.
-*/
+:where([data-debugcss-ignore], [data-debugcss-ignore] *) {
+  counter-increment: none !important;
+  outline: none !important;
+}
 
-body > img:only-child {
-  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgAgMAAAAOFJJnAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAlQTFRF/+Pj2tra2dnZ4Z9gVgAAAHxJREFUGBkFwUGKxDAQBDB9shqcuw2T/3TAc5+A95UruZv+IoNqvEWCavLFDB2M5vPgGpyFNOcB80cPJMxgHhLkQ4IxuBorpDA3Y+MazEfC2+gwgnOxHnSogb15F1JcGxmkcBb1AwlVqCIHadZGwt+NGmQhD1lIuB+scOUfnCk3BP0u5SsAAAAASUVORK5CYII=);
-  border: 50px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  display: block;
-  margin: 1em auto;
-  padding: 0;
+:where([data-debugcss-ignore], [data-debugcss-ignore] *)::after {
+  content: none !important;
+}
+
+.debugcss-alpha,
+[data-debugcss-alpha] {
+  background-color: #ffffff !important;
+  background-image: var(--debugcss-alpha-bg) !important;
+  background-repeat: repeat !important;
+  background-size: 16px 16px !important;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12) !important;
+}
+
+body > img:only-child,
+body > img.debugcss-alpha:only-child,
+body > img[data-debugcss-alpha]:only-child {
+  background-image: var(--debugcss-alpha-bg) !important;
+  border: 32px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3) !important;
+  display: block !important;
+  margin: 1rem auto !important;
+  padding: 0 !important;
 }

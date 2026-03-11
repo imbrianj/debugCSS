@@ -1,24 +1,98 @@
+# debugCSS
 
-# debugCSS: (X)HTML debugging tool built with CSS
+`debugCSS.css` is a single drop-in stylesheet for visually flagging malformed,
+inaccessible, security-sensitive, or legacy markup on an existing page.
 
-debugCSS is meant to be loaded on an existing page to highlight potentially broken, malformed or legacy (X)HTML.
+The file focuses on issues that are still useful to catch in current HTML:
 
-Not all "errors" are created equally, so they are color coded to highlight severity.  Green is "probably not a big problem", yellow is "worth looking at" and red is "you really should fix this."
+- missing document language or title
+- missing `alt` text and broken image sources
+- empty buttons or links with no accessible name
+- focusable content hidden with `aria-hidden`
+- unlabeled `iframe`, `role="img"`, `role="dialog"`, and `role="slider"` patterns
+- required ARIA widget states like `aria-checked`, `aria-selected`, and `aria-expanded`
+- positive `tabindex`, `accesskey`, autoplay media, and radio inputs with no `name`
+- `target="_blank"` links without `rel="noopener"` or `rel="noreferrer"`
+- invalid list structure and empty headings
+- deprecated elements and legacy presentational attributes
+- missing table captions and fieldset legends when the browser supports `:has()`
 
-Each condition is specified in three areas:
-- Setting up the :after area for display (trying to reset common styles like colors, font sizes, etc).
-- Specifying the color severity (green, yellow, red) and content (which is the error or warning message to be displayed).
-- Creating the outline around the offending element according to it's color severity.
+## How To Use It
 
-## Install
+Load `debugCSS.css` into the page you want to inspect. The stylesheet adds:
 
-Visit [http://imbrianj.github.com/debugCSS/](http://imbrianj.github.com/debugCSS/) to install the bookmarklet.
+- colored outlines around matching elements
+- small inline message chips near each issue
+- a fixed summary panel showing severity counts plus a11y / structure / legacy / security totals
+
+Severity colors:
+
+- Error: something is likely broken or inaccessible
+- Warning: likely worth fixing soon
+- Notice: legacy or context-dependent issue
+
+## Modes And Filters
+
+The stylesheet supports a few CSS-only control hooks on the root `html` element:
+
+- `data-debugcss-compact`
+  - hides most inline message chips until hover or focus
+- `data-debugcss-mode="a11y structure legacy security"`
+  - space-separated category filter
+  - example: `data-debugcss-mode="a11y security"`
+- `data-debugcss-level="error warning notice"`
+  - space-separated severity filter
+  - example: `data-debugcss-level="error warning"`
+
+You can combine them:
+
+```html
+<html data-debugcss-compact data-debugcss-mode="a11y security" data-debugcss-level="error warning">
+```
+
+Document-level checks on the root element, such as missing `lang`, may remain
+visible even when filters are active.
+
+## Modern Browser Notes
+
+The base rules work in current evergreen browsers.
+
+Extra rules that rely on `:has()` are automatically enabled when the browser
+supports that selector. Those checks cover things like:
+
+- missing `<title>`, `<meta charset>`, or `<main>`
+- labels that neither wrap a control nor point at one
+- form controls with no obvious built-in label path
+- `details` without `summary`
+- `fieldset` without `legend`
+- data tables without `caption`
+- inline SVG images with no accessible name
+- sections with no heading or accessible name
+- videos with controls but no caption or subtitle track
+
+## Escape Hatches
+
+Use `data-debugcss-ignore` on an element to suppress debugCSS for that element
+and its subtree.
+
+Use `.debugcss-alpha` or `[data-debugcss-alpha]` to apply the embedded
+checkerboard background when you want transparent images to sit on a visible
+pattern.
+
+The old standalone-image behavior is still present for `body > img:only-child`.
+
+## Limits
+
+This is still CSS. It can highlight a lot, but it cannot reliably detect
+everything that requires DOM relationships, computed accessible names, or
+scripted behavior. The rule set therefore prefers high-signal checks over
+trying to guess every possible accessibility bug.
+
+The summary panel is best treated as approximate. CSS counters cannot count
+multiple separate rule hits on the exact same element with perfect accuracy,
+so the totals are most useful as a quick signal rather than a strict audit
+report.
 
 ## License
 
-Copyrights for code authored by Yahoo! Inc. is licensed under the following terms: 
-MIT License
-Copyright (c) 2011 Yahoo! Inc. All Rights Reserved.
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+Copyrights for code authored by Yahoo! Inc. are licensed under the MIT License.
